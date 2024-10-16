@@ -129,6 +129,45 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = mockUserProfile();
+    void _showEditProfileDialog({
+      required BuildContext context,
+      required String title,
+      required String initialValue,
+      required Function(String) onSave,
+    }) {
+      final TextEditingController controller = TextEditingController(text: initialValue);
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            title: Text('Edit $title'),
+            content: TextField(
+              controller: controller,
+              decoration: InputDecoration(labelText: title),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Đóng dialog
+                },
+                child: const Text('Cancel', style: TextStyle(color: Colors.black),),
+              ),
+              TextButton(
+                onPressed: () {
+                  onSave(controller.text); // Gọi hàm onSave với giá trị mới
+                  Navigator.of(context).pop(); // Đóng dialog
+                },
+                child: const Text('Save', style: TextStyle(color: Color(0xFF55B97D)),),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -169,9 +208,39 @@ class ProfileScreen extends StatelessWidget {
               const TSectionHeading(title: 'Profile Information', showActionButton: false),
               const SizedBox(height: TSizes.spaceBtwItems),
 
-              TProfileMenu(onPressed: () {}, title: 'Name', value: user['fullname'] ?? 'N/A'),
-              TProfileMenu(onPressed: () {}, title: 'Address', value: user['address'] ?? 'N/A'),
+              // TProfileMenu(onPressed: () {}, title: 'Name', value: user['fullname'] ?? 'N/A'),
+              TProfileMenu(
+                onPressed: () {
+                  _showEditProfileDialog(
+                    context: context,
+                    title: 'Name',
+                    initialValue: user['fullname'] ?? 'N/A',
+                    onSave: (newValue) {
+                      // Thêm logic cập nhật tên mới
+                      print('New Name: $newValue');
+                    },
+                  );
+                },
+                title: 'Name',
+                value: user['fullname'] ?? 'N/A',
+              ),
 
+              // TProfileMenu(onPressed: () {}, title: 'Address', value: user['address'] ?? 'N/A'),
+              TProfileMenu(
+                onPressed: () {
+                  _showEditProfileDialog(
+                    context: context,
+                    title: 'Address',
+                    initialValue: user['address'] ?? 'N/A',
+                    onSave: (newValue) {
+                      // Thêm logic cập nhật tên mới
+                      print('New Address: $newValue');
+                    },
+                  );
+                },
+                title: 'Address',
+                value: user['address'] ?? 'N/A',
+              ),
               const SizedBox(height: TSizes.spaceBtwItems),
               const Divider(),
               const SizedBox(height: TSizes.spaceBtwItems),
@@ -182,7 +251,24 @@ class ProfileScreen extends StatelessWidget {
 
               TProfileMenu(onPressed: () {}, icon: Iconsax.copy, title: 'Role', value: user['role'] ?? 'N/A'),
               TProfileMenu(onPressed: () {}, title: 'E-mail', value: user['email'] ?? 'N/A'),
-              TProfileMenu(onPressed: () {}, title: 'Phone Number', value: user['phone'] ?? 'N/A'),
+              // TProfileMenu(onPressed: () {}, title: 'Phone Number', value: user['phone'] ?? 'N/A'),
+              TProfileMenu(
+                onPressed: () {
+                  _showEditProfileDialog(
+                    context: context,
+                    title: 'Phone Number',
+                    initialValue: user['phone'] ?? 'N/A',
+                    onSave: (newValue) {
+                      // Thêm logic cập nhật tên mới
+                      print('New Phones: $newValue');
+                    },
+                  );
+                },
+                title: 'Phone Number',
+                value: user['phone'] ?? 'N/A',
+              ),
+
+
               TProfileMenu(onPressed: () {}, title: 'Gender', value: user['gender']?.toUpperCase() ?? 'N/A'),
               // TProfileMenu(onPressed: (){}, title: 'Date of Birth', value: user['dob'] ?? 'N/A'),
               const Divider(),

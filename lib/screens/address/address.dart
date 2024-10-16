@@ -17,11 +17,11 @@ class UserAddressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: TColors.primary,
-        onPressed: () => Get.to(() => const AddNewAddressScreen()),
-        child: const Icon(Iconsax.add, color: TColors.white),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: TColors.primary,
+      //   onPressed: () => Get.to(() => const AddNewAddressScreen()),
+      //   child: const Icon(Iconsax.add, color: TColors.white),
+      // ),
       appBar: TAppBar(
         title:
         Text('Addresses', style: Theme.of(context).textTheme.headlineMedium), showBackArrow: true,
@@ -37,7 +37,6 @@ class UserAddressScreen extends StatelessWidget {
           padding: EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
-              TSingleAddress(selectedAddress: false),
               TSingleAddress(selectedAddress: true),
             ],
           ),

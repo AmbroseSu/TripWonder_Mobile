@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tripwonder/screens/explore_screen.dart';
 import 'package:tripwonder/screens/login/login.dart';
 import 'package:tripwonder/screens/signup/signup.dart';
 import 'package:tripwonder/screens/signup/verify_email.dart';
@@ -17,7 +16,7 @@ class SplashScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.black,
           image: DecorationImage(
-            image: AssetImage("assets/images/welcome.jpeg"),
+            image: AssetImage("assets/logos/welcome_2.jpg"),
             fit: BoxFit.cover,
             opacity: 0.5,
           ),
