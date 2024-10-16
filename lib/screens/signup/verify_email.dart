@@ -167,7 +167,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         //final userEmail = responseData['content']['email'];
 
         UserManager userManager = UserManager();
-        userManager.id = responseData['content']['id'];
+        userManager.id = responseData['content']['userId'];
         userManager.email = responseData['content']['email'];
         userManager.role = responseData['content']['role'];
 

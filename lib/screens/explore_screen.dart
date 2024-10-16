@@ -5,10 +5,8 @@ import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tripwonder/screens/product_detail/place_screen.dart';
-import 'package:tripwonder/styles&text&sizes/colors.dart';
 import 'package:tripwonder/styles&text&sizes/image_strings.dart';
 import 'package:tripwonder/styles&text&sizes/sizes.dart';
-import 'package:tripwonder/widgets/login_signup/circular_container.dart';
 import 'package:tripwonder/widgets/popular_item.dart';
 import 'package:tripwonder/widgets/recommend_item.dart';
 
@@ -138,8 +136,8 @@ class _ExploreScreenState extends State<ExploreScreen>
               controller: _tabController,
               children: [
                 buildTabContent("Location"),
-                buildTabContent("Hotels"),
-                buildTabContent("Food"),
+                buildTabContent("Individual"),
+                buildTabContent("Group"),
                 buildTabContent("Adventure"),
               ],
             ))
