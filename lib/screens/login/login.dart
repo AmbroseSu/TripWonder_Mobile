@@ -9,6 +9,7 @@ import 'package:tripwonder/styles&text&sizes/colors.dart';
 import 'package:tripwonder/styles&text&sizes/image_strings.dart';
 import 'package:tripwonder/styles&text&sizes/sizes.dart';
 import 'package:tripwonder/styles&text&sizes/text_strings.dart';
+import 'package:tripwonder/widgets/appbar.dart';
 
 import '../../styles&text&sizes/spacing_styles.dart';
 import '../../widgets/login_signup/form_divider.dart';
@@ -20,11 +21,13 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar:
+      AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
       ),
+
 
 
       backgroundColor: Colors.white,

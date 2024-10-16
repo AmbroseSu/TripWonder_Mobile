@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tripwonder/api/global_variables/fcm_token_manage.dart';
+import 'package:tripwonder/api/global_variables/user_manage.dart';
 import 'package:tripwonder/screens/login/login.dart';
 import 'package:tripwonder/styles&text&sizes/sizes.dart';
 import 'package:tripwonder/styles&text&sizes/text_strings.dart';
@@ -11,12 +16,112 @@ import 'package:tripwonder/widgets/login_signup/social_buttons.dart';
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
+
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  String? selectedGender; // Variable to store selected gender
+
+  final TextEditingController _fullnameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmController =
+      TextEditingController();
+  final ValueNotifier<String?> selectedGender = ValueNotifier<String?>(null);
+  final TextEditingController _addressController = TextEditingController();
+
+  final String _baseUrl =
+      'https://tripwonder.onrender.com/api/v1/auth/save-infor';
+
+  UserManager userManager = UserManager();
+  bool _showPassword = false;
+  bool _showConfirmPassword = false;
+
+  Future<void> _signup() async {
+    final String? email = userManager.email;
+    final String fullname = _fullnameController.text;
+    final String phone = _phoneController.text;
+    final String password = _passwordController.text;
+    final String confirmPassword = _passwordConfirmController.text;
+    final String address = _addressController.text;
+    final String gender = selectedGender.value ?? 'Other';
+    final String? fcmtoken = TokenManager().fcmToken;
+
+    if (confirmPassword != password) {
+      Get.snackbar(
+        'Error',
+        'Confirm password does not match',
+        snackPosition: SnackPosition.TOP,
+        //backgroundColor: Colors.white,
+        colorText: Colors.red,
+      );
+      return; // Dừng hàm nếu không trùng
+    }
+    if (fullname.isEmpty ||
+        phone.isEmpty ||
+        address.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty ||
+        gender.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'Please input all fields',
+        snackPosition: SnackPosition.TOP,
+        colorText: Colors.red,
+      );
+      return; // Dừng hàm nếu có bất kỳ trường nào trống
+    }
+
+    final Map<String, dynamic> data = {
+      'email': email,
+      'fullname': fullname,
+      'phone': phone,
+      'password': password,
+      'address': address,
+      'gender': gender.toUpperCase(),
+      'FCMToken': fcmtoken, // Thay thế bằng FCM token thực tế của bạn
+    };
+
+    print("Đây là data aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: $data");
+    print(fullname);
+    print(phone);
+    print(address);
+    print(password);
+    print(gender);
+    print(fcmtoken);
+
+    final Uri url = Uri.parse(_baseUrl);
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(data),
+      );
+
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      String? fcmToken = TokenManager().fcmToken;
+      if (response.statusCode == 201) {
+        String body = "Save information successfully. Please login !!";
+        String title = "Create Successfully.";
+        // await PushNotificationService.sendNotificationToSelectedDrived(
+        //     fcmToken,
+        //     context,
+        //     title,
+        //     body
+        // );
+        Get.to(() => const LoginScreen());
+      } else {
+        // Xử lý khi API thất bại
+        Get.snackbar('Error', 'Failed to sign up: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Xử lý lỗi kết nối
+      Get.snackbar('Error', 'Failed to connect to the server: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +140,7 @@ class _SignupScreenState extends State<SignupScreen> {
             children: [
               /// Title
               Text('Fill your information',
-                  style: Theme.of(context).textTheme.headlineLarge ),
+                  style: Theme.of(context).textTheme.headlineLarge),
               const SizedBox(height: TSizes.spaceBtwSections),
 
               /// Form
@@ -45,6 +150,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     /// Fullname
                     TextFormField(
                       expands: false,
+                      controller: _fullnameController,
                       decoration: const InputDecoration(
                         labelText: 'Full Name',
                         prefixIcon: Icon(Iconsax.user),
@@ -55,6 +161,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     /// Phone number
                     TextFormField(
                       expands: false,
+                      controller: _phoneController,
                       decoration: const InputDecoration(
                         labelText: TTexts.phoneNo,
                         prefixIcon: Icon(Iconsax.call),
@@ -65,10 +172,20 @@ class _SignupScreenState extends State<SignupScreen> {
                     /// Password
                     TextFormField(
                       expands: false,
-                      decoration: const InputDecoration(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
                         labelText: TTexts.password,
-                        prefixIcon: Icon(Iconsax.password_check),
-                        suffixIcon: Icon(Iconsax.eye_slash),
+                        prefixIcon: const Icon(Iconsax.password_check),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _showPassword ? Iconsax.eye : Iconsax.eye_slash,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _showPassword = !_showPassword;
+                            });
+                          },
+                        ),
                       ),
                     ),
                     const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -76,10 +193,22 @@ class _SignupScreenState extends State<SignupScreen> {
                     /// Confirm Password
                     TextFormField(
                       expands: false,
-                      decoration: const InputDecoration(
+                      controller: _passwordConfirmController,
+                      decoration: InputDecoration(
                         labelText: 'Confirm Password',
-                        prefixIcon: Icon(Iconsax.password_check),
-                        suffixIcon: Icon(Iconsax.eye_slash),
+                        prefixIcon: const Icon(Iconsax.password_check),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _showConfirmPassword
+                                ? Iconsax.eye
+                                : Iconsax.eye_slash,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _showConfirmPassword = !_showConfirmPassword;
+                            });
+                          },
+                        ),
                       ),
                     ),
                     const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -87,6 +216,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     /// Address
                     TextFormField(
                       expands: false,
+                      controller: _addressController,
                       decoration: const InputDecoration(
                           labelText: TTexts.address,
                           prefixIcon: Icon(Iconsax.location)),
@@ -94,24 +224,47 @@ class _SignupScreenState extends State<SignupScreen> {
                     const SizedBox(height: TSizes.spaceBtwInputFields),
 
                     /// Gender Dropdown
-                    DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        labelText: 'Gender',
-                        prefixIcon: Icon(Iconsax.user_tag),
-                      ),
-                      dropdownColor: Colors.white,
-                      value: selectedGender,
-                      items: <String>['Female', 'Male', 'Other']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
+                    // DropdownButtonFormField<String>(
+                    //   decoration: const InputDecoration(
+                    //     labelText: 'Gender',
+                    //     prefixIcon: Icon(Iconsax.user_tag),
+                    //   ),
+                    //   dropdownColor: Colors.white,
+                    //   value: selectedGender,
+                    //   items: <String>['Female', 'Male', 'Other']
+                    //       .map<DropdownMenuItem<String>>((String value) {
+                    //     return DropdownMenuItem<String>(
+                    //       value: value,
+                    //       child: Text(value),
+                    //     );
+                    //   }).toList(),
+                    //   onChanged: (newValue) {
+                    //     setState(() {
+                    //       selectedGender = newValue;
+                    //     });
+                    //   },
+                    // ),
+                    // const SizedBox(height: TSizes.spaceBtwInputFields),
+                    ValueListenableBuilder<String?>(
+                      valueListenable: selectedGender,
+                      builder: (context, value, child) {
+                        return DropdownButtonFormField<String>(
                           value: value,
-                          child: Text(value),
+                          onChanged: (String? newValue) {
+                            selectedGender.value = newValue;
+                          },
+                          items: <String>['Male', 'Female', 'Other']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          decoration: const InputDecoration(
+                            labelText: 'Gender',
+                            prefixIcon: Icon(Iconsax.user),
+                          ),
                         );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          selectedGender = newValue;
-                        });
                       },
                     ),
                     const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -142,8 +295,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                     .textTheme
                                     .bodyMedium!
                                     .apply(
-                                    color: Colors.black,
-                                    decorationColor: Colors.black)),
+                                        color: Colors.black,
+                                        decorationColor: Colors.black)),
                             TextSpan(
                                 text: 'and ',
                                 style: Theme.of(context).textTheme.bodySmall),
@@ -153,8 +306,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                     .textTheme
                                     .bodyMedium!
                                     .apply(
-                                    color: Colors.black,
-                                    decorationColor: Colors.black)),
+                                        color: Colors.black,
+                                        decorationColor: Colors.black)),
                           ]),
                         ),
                       ],
@@ -164,11 +317,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     /// Sign Up Button
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()),
-                        );
+                        _signup();
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 15),

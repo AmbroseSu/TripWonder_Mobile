@@ -240,11 +240,14 @@
 // }
 
 import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tripwonder/api/global_variables/user_manage.dart';
 import 'package:tripwonder/screens/signup/verify_email.dart';
 import '../../styles&text&sizes/image_strings.dart';
 import '../../styles&text&sizes/sizes.dart';
@@ -263,7 +266,8 @@ class OtpVerificationScreen extends StatefulWidget {
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   late Timer _timer;
   int _start = 60;
-  final List<TextEditingController> _otpControllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _otpControllers =
+      List.generate(6, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
 
   @override
@@ -294,12 +298,54 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     super.dispose();
   }
 
+  UserManager userManager = UserManager();
+
+  Future<void> verifyOtp(String otp) async {
+    final url =
+        'https://tripwonder.onrender.com/api/v1/auth/verify-email?token=$otp&id=${userManager.id}';
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    print('Sending POST request to $url');
+    print('Headers: $headers');
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+      );
+
+      print('Status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 201) {
+        final responseData = json.decode(response.body);
+        print('Success: $responseData');
+        Get.to(() => SuccessScreen(
+              image: TImages.verifyEmailSuccess,
+              title: TTexts.yourAccountCreatedTitle,
+              subTitle: TTexts.yourAccountCreatedSubTitle,
+              onPressed: () => Get.to(() => const SignupScreen()),
+            ));
+      } else {
+        print('Failed to verify OTP');
+        Get.snackbar('Error', 'Failed to verify OTP: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error: $error');
+      Get.snackbar('Error', 'An error occurred: $error');
+    }
+  }
+
   void _nextField(int index, String value) {
     if (value.isNotEmpty) {
       if (index < _otpControllers.length - 1) {
         FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
       } else {
-        FocusScope.of(context).unfocus(); // Remove focus if all fields are filled
+        FocusScope.of(context)
+            .unfocus(); // Remove focus if all fields are filled
       }
     } else if (index > 0) {
       FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
@@ -310,14 +356,19 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AppBar(
+      appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         actions: [
           // IconButton(
           //     onPressed: () => Get.offAll(() => const LoginScreen()),
           //     icon: const Icon(CupertinoIcons.clear))
-          TextButton(onPressed: () => Get.offAll(() => const VerifyEmailScreen()), child: Text("Go Back", style: TextStyle(color: Color(0xFF55B97D)),))
+          TextButton(
+              onPressed: () => Get.offAll(() => const VerifyEmailScreen()),
+              child: Text(
+                "Go Back",
+                style: TextStyle(color: Color(0xFF55B97D)),
+              ))
         ],
       ),
       body: Stack(
@@ -346,19 +397,24 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   children: [
                     // Title
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: TSizes.md),
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: TSizes.md),
                       child: Text(
                         // TTexts.otpVerificationTitle,
                         'Verify your email 2/2',
 
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(height: TSizes.spaceBtwItems),
 
                     // Subtitle
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: TSizes.md),
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: TSizes.md),
                       child: Text(
                         TTexts.otpVerificationSubTitle,
                         style: Theme.of(context).textTheme.labelMedium,
@@ -388,7 +444,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                             onChanged: (value) {
                               _nextField(index, value);
                             },
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
                           ),
                         );
                       }),
@@ -422,24 +480,22 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     // Verification button
                     GestureDetector(
                       onTap: () {
-                        final otp = _otpControllers.map((controller) => controller.text).join();
+                        final otp = _otpControllers
+                            .map((controller) => controller.text)
+                            .join();
                         if (otp.length == 6) {
                           // Directly navigate to SuccessScreen for UI testing
-                          Get.to(() => SuccessScreen(
-                            image: TImages.verifyEmailSuccess,
-                            title: TTexts.yourAccountCreatedTitle,
-                            subTitle: TTexts.yourAccountCreatedSubTitle,
-                            onPressed: () => Get.to(() => const SignupScreen()),
-                          ));
+                          verifyOtp(otp);
                         } else {
-                          Get.snackbar('Error', 'Please enter the complete OTP');
+                          Get.snackbar(
+                              'Error', 'Please enter the complete OTP');
                         }
                       },
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 15),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color:  Color(0xFF55B97D),
+                          color: Color(0xFF55B97D),
                         ),
                         child: Center(
                           child: Text(
