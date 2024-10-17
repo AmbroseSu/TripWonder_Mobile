@@ -127,17 +127,26 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:tripwonder/screens/splash_screen.dart';
+import 'package:tripwonder/utils.dart';
 
 final navigatorkey = GlobalKey<NavigatorState>();
 
 
-void main(){
+void main() async{
+  await setup();
   runApp(MyApp());
 }
 
+Future<void> setup() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupFirebase();
+  await registerServices();
+}
+
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

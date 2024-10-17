@@ -184,47 +184,47 @@ class MyTripCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    cafeName,
-                    style: Theme.of(context).textTheme.headlineLarge,
-                  ),
-                  const SizedBox(height: 8.0),
-
-                  Row(
-                    children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 18),
-                      const SizedBox(width: 4.0),
-                      Text(
-                        rating.toString(),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        ' ($reviewCount)',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 50),
-
-                  Text(
-                    time,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  const SizedBox(height: 8.0),
-                  Text(
-                    '\$$price',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
+              Expanded(  // Thêm Expanded ở đây
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      cafeName,
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                    const SizedBox(height: 4.0),
+                    Row(
+                      children: [
+                        const Icon(Icons.star, color: Colors.amber, size: 18),
+                        const SizedBox(width: 4.0),
+                        Text(
+                          rating.toString(),
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        Text(
+                          ' ($reviewCount)',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      time,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      '\$$price',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

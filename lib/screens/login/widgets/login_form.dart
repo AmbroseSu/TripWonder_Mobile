@@ -60,7 +60,7 @@ class _TLoginFormState extends State<TLoginForm> {
         var userDTO = responseData['content']['userDTO'];
         var token = responseData['content']['token'];
 
-        userManager.id = userDTO['id'];
+        userManager.id = userDTO['userId'];
         userManager.email = userDTO['email'];
         userManager.role = userDTO['role'];
         userManager.token = token;

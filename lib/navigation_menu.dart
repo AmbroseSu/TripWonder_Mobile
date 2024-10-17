@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tripwonder/api/global_variables/user_manage.dart';
 import 'package:tripwonder/screens/cart/cart.dart';
 import 'package:tripwonder/screens/explore_screen.dart';
 import 'package:tripwonder/screens/order/order.dart';
@@ -15,7 +16,8 @@ class NavigationMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(NavigationController());
     final darkMode = THelperFunctions.isDarkMode(context);
-
+    print("000000000000000000000000000000000000000000000000000000000000000");
+    print(UserManager().id);
     return Scaffold(
       bottomNavigationBar: Obx(
         () => NavigationBar(
