@@ -1,18 +1,17 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tripwonder/screens/product_detail/place_screen.dart';
-import 'package:tripwonder/styles&text&sizes/image_strings.dart';
-import 'package:tripwonder/styles&text&sizes/sizes.dart';
-import 'package:tripwonder/widgets/popular_item.dart';
-import 'package:tripwonder/widgets/recommend_item.dart';
-
-import '../widgets/article_card.dart';
+import 'package:http/http.dart' as http;
+import '../widgets/popular_item.dart';
+import '../widgets/recommend_item.dart';
 import '../widgets/promo_slider.dart';
+import '../widgets/article_card.dart';
 import '../widgets/section_heading.dart';
+import '../styles&text&sizes/image_strings.dart';
+import '../styles&text&sizes/sizes.dart';
+import 'product_detail/place_screen.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -24,19 +23,38 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
-
+  List<String> _categories = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    fetchCategories();
+  }
+
+  Future<void> fetchCategories() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://tripwonder.onrender.com/api/v1/category/get-all?page=1&limit=100'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List categories = data['content'];
+
+        setState(() {
+          _categories = categories.map((category) => category['name'] as String).toList();
+          _tabController = TabController(length: _categories.length, vsync: this);
+        });
+      } else {
+        throw Exception('Failed to load categories');
+      }
+    } catch (e) {
+      print("Error fetching categories: $e");
+    }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _tabController.dispose();
     super.dispose();
   }
@@ -94,184 +112,210 @@ class _ExploreScreenState extends State<ExploreScreen>
                 ],
               ),
             ),
-            Padding(padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 decoration: BoxDecoration(
                   color: Color(0xFFF3F8FE),
-                  borderRadius: BorderRadius.circular(24)
+                  borderRadius: BorderRadius.circular(24),
                 ),
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: "Find places to visit",
                     border: InputBorder.none,
-                    prefixIcon: Icon(Icons.search)
+                    prefixIcon: Icon(Icons.search),
                   ),
                 ),
               ),
             ),
-
-            TabBar(
+            if (_categories.isNotEmpty) ...[
+              TabBar(
                 controller: _tabController,
-              indicatorColor: Color(0xFF55B97D),
-              labelColor: Color(0xFF55B97D),
-              unselectedLabelColor: Color(0xFFB8B8B8),
-              labelStyle: GoogleFonts.robotoCondensed(
-                fontWeight: FontWeight.w700,
-                fontSize: 16
-              ),
-              unselectedLabelStyle: GoogleFonts.robotoCondensed(
+                isScrollable: true,
+                indicatorColor: Color(0xFF55B97D),
+                labelColor: Color(0xFF55B97D),
+                unselectedLabelColor: Color(0xFFB8B8B8),
+                labelStyle: GoogleFonts.robotoCondensed(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                ),
+                unselectedLabelStyle: GoogleFonts.robotoCondensed(
                   fontWeight: FontWeight.w400,
-                  fontSize: 16
+                  fontSize: 16,
+                ),
+                tabs: _categories
+                    .map((category) => Tab(text: category))
+                    .toList(),
               ),
-              tabs: [
-                Tab(text: "Luxurious"),
-                Tab(text: "Individual"),
-                Tab(text: "Group"),
-                Tab(text: "Adventure"),
-              ],
-            ),
-            SizedBox(height: 20),
-            Expanded(child: TabBarView(
-              controller: _tabController,
-              children: [
-                buildTabContent("Location"),
-                buildTabContent("Individual"),
-                buildTabContent("Group"),
-                buildTabContent("Adventure"),
-              ],
-            ))
+              SizedBox(height: 20),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: _categories
+                      .map((category) => buildTabContent(category))
+                      .toList(),
+                ),
+              ),
+            ] else ...[
+              Center(
+                child: CircularProgressIndicator(),
+              ),
+            ],
           ],
         ),
-        // bottomNavigationBar: BottomNavigationBar(
-        //   backgroundColor: Colors.white,
-        //   fixedColor: Color(0xFF55B97D),
-        //   currentIndex: 0,
-        //   unselectedItemColor: Colors.black38,
-        //   items: [
-        //     BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: ''),
-        //     BottomNavigationBarItem(icon: Icon(Icons.search), label: ''),
-        //     BottomNavigationBarItem(icon: Icon(Icons.favorite), label: ''),
-        //     BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
-        //   ],
-        // ),
-
       ),
     );
   }
-  Widget buildTabContent(String tab){
-    return Padding(padding: EdgeInsets.symmetric(horizontal: 20),
-    child: SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(TSizes.defaultSpace),
-            child: TPromoSlider(banners: [TImages.chicago, TImages.lima, TImages.tokyo],),
-          ),
-          SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Popular",
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: Color(0xFF232323),
-                ),
+
+  Widget buildTabContent(String category) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(TSizes.defaultSpace),
+              child: TPromoSlider(
+                banners: [TImages.chicago, TImages.lima, TImages.tokyo],
               ),
-              Text(
-                "See all",
-                style: GoogleFonts.robotoCondensed(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                  color: Color(0xFF55B97D),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 12),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                PopularItem(title: "Alley Place", rating: "4.1", image: "assets/images/Alley Palace.png"),
-                SizedBox(width: 16),
-                PopularItem(title: "Condures Alpes", rating: "4.9", image: "assets/images/Coeurdes Alpes.png")
-              ],
             ),
-          ),
-          SizedBox(height: 32),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Recommended",
-                style: GoogleFonts.montserrat(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: Color(0xFF232323),
-                ),
-              ),
-              Text(
-                "See all",
-                style: GoogleFonts.robotoCondensed(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                  color: Color(0xFF55B97D),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
+            SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                RecommendCard(title: "Explore TripWonder", duration: "4N/5D", deal: "Hot Deal", image: "assets/images/rectangle_9921.jpeg", onTap: () {Get.to(() => const PlaceScreen());},),
-                SizedBox(width: 16),
-                RecommendCard(title: "Luxurious TripWonder", duration: "2N/3D", deal: "New Deal", image: TImages.tokyo, onTap: () {Get.to(() => const PlaceScreen());}),
-                SizedBox(width: 16),
-                RecommendCard(title: "Luxurious TripWonder", duration: "2N/3D", deal: "Hot Deal", image: TImages.lima, onTap: () {Get.to(() => const PlaceScreen());})
-              ],
-            ),
-          ),
-          SizedBox(height: 50),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: TSizes.defaultSpace / 2,
-            ),
-            child: Column(
-              children: [
-                TSectionHeading(
-                  title: 'Article',
-                  showActionButton: true,
-                  textColor: Colors.black,
-                  onPressed: () {},
+                Text(
+                  "Popular",
+                  style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    color: Color(0xFF232323),
+                  ),
                 ),
-                const SizedBox(height: TSizes.spaceBtwItems),
-                SizedBox(
-                  height: 250,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 2,
-                    itemBuilder: (context, index) {
-                      return const ArticleCard(
-                        imageUrl: AssetImage(TImages.canada),
-                        title: 'The essential guide to visiting Canada',
-                        author: 'Alexander Wooley',
-                        date: '5 June 2024',
-                        url: 'https://www.nationalgeographic.com/travel/article/essential-guide-canada',
-                      );
-                    },
+                Text(
+                  "See all",
+                  style: GoogleFonts.robotoCondensed(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: Color(0xFF55B97D),
                   ),
                 ),
               ],
             ),
-          ),
-        ],
+            SizedBox(height: 12),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  PopularItem(
+                    title: "Alley Place",
+                    rating: "4.1",
+                    image: "assets/images/Alley Palace.png",
+                  ),
+                  SizedBox(width: 16),
+                  PopularItem(
+                    title: "Condures Alpes",
+                    rating: "4.9",
+                    image: "assets/images/Coeurdes Alpes.png",
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Recommended",
+                  style: GoogleFonts.montserrat(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    color: Color(0xFF232323),
+                  ),
+                ),
+                Text(
+                  "See all",
+                  style: GoogleFonts.robotoCondensed(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: Color(0xFF55B97D),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  RecommendCard(
+                    title: "Explore TripWonder",
+                    duration: "4N/5D",
+                    deal: "Hot Deal",
+                    image: "assets/images/rectangle_9921.jpeg",
+                    onTap: () {
+                      Get.to(() => const PlaceScreen());
+                    },
+                  ),
+                  SizedBox(width: 16),
+                  RecommendCard(
+                    title: "Luxurious TripWonder",
+                    duration: "2N/3D",
+                    deal: "New Deal",
+                    image: TImages.tokyo,
+                    onTap: () {
+                      Get.to(() => const PlaceScreen());
+                    },
+                  ),
+                  SizedBox(width: 16),
+                  RecommendCard(
+                    title: "Luxurious TripWonder",
+                    duration: "2N/3D",
+                    deal: "Hot Deal",
+                    image: TImages.lima,
+                    onTap: () {
+                      Get.to(() => const PlaceScreen());
+                    },
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 50),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: TSizes.defaultSpace / 2),
+              child: Column(
+                children: [
+                  TSectionHeading(
+                    title: 'Article',
+                    showActionButton: true,
+                    textColor: Colors.black,
+                    onPressed: () {},
+                  ),
+                  const SizedBox(height: TSizes.spaceBtwItems),
+                  SizedBox(
+                    height: 250,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 2,
+                      itemBuilder: (context, index) {
+                        return const ArticleCard(
+                          imageUrl: AssetImage(TImages.canada),
+                          title: 'The essential guide to visiting Canada',
+                          author: 'Alexander Wooley',
+                          date: '5 June 2024',
+                          url: 'https://www.nationalgeographic.com/travel/article/essential-guide-canada',
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-    ),);
+    );
   }
 }
+

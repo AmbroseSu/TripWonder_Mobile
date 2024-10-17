@@ -174,7 +174,7 @@ class _TSingleAddressState extends State<TSingleAddress> {
               ),
               const SizedBox(height: TSizes.sm / 2),
               Text(
-                userProfile?['phone'] ?? '(+84) 456 7890',
+                userProfile?['phoneNumber'] ?? '(+84) 456 7890',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tripwonder/screens/explore_screen.dart';
 import 'package:tripwonder/styles&text&sizes/product_card_vertical.dart';
+import 'package:tripwonder/styles&text&sizes/product_card_vertical_fav.dart';
 import 'package:tripwonder/styles&text&sizes/sizes.dart';
 import 'package:tripwonder/widgets/appbar.dart';
 import 'package:tripwonder/widgets/grid_layout.dart';
@@ -32,7 +33,7 @@ class FavoriteScreen extends StatelessWidget {
             padding: EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
-              TGridLayout(itemCount: 6, itemBuilder: (_, index) => const TProductCardVertical())
+              TGridLayout(itemCount: 6, itemBuilder: (_, index) => const TProductCardVerticalFav())
             ],
           ),
         ),
