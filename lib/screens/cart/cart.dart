@@ -22,15 +22,20 @@ class CartScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: TAppBar(
-        title:
-        Text('Order', style: Theme.of(context).textTheme.headlineMedium), showBackArrow: true,
-        actions: [
-          TCircularIcon(
-            icon: Iconsax.add,
-            onPressed: () => Get.to(const NavigationMenu()),
-          )
-        ],
+      // appBar: TAppBar(
+      //   title:
+      //   Text('Order', style: Theme.of(context).textTheme.headlineMedium), showBackArrow: true,
+      //   actions: [
+      //     TCircularIcon(
+      //       icon: Iconsax.add,
+      //       onPressed: () => Get.to(const NavigationMenu()),
+      //     )
+      //   ],
+      // ),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text('Order', style: Theme.of(context).textTheme.headlineMedium),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
