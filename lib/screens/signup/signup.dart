@@ -1,13 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tripwonder/api/global_variables/fcm_token_manage.dart';
 import 'package:tripwonder/api/global_variables/user_manage.dart';
+import 'package:tripwonder/consts.dart';
 import 'package:tripwonder/screens/login/login.dart';
+import 'package:tripwonder/service/media_service.dart';
+import 'package:tripwonder/service/storage_service.dart';
 import 'package:tripwonder/styles&text&sizes/sizes.dart';
 import 'package:tripwonder/styles&text&sizes/text_strings.dart';
 import 'package:tripwonder/widgets/login_signup/form_divider.dart';
@@ -22,7 +27,9 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-
+  final GetIt _getIt = GetIt.instance;
+  late StorageService _storageService;
+  late MediaService _mediaService;
   final TextEditingController _fullnameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -30,13 +37,20 @@ class _SignupScreenState extends State<SignupScreen> {
       TextEditingController();
   final ValueNotifier<String?> selectedGender = ValueNotifier<String?>(null);
   final TextEditingController _addressController = TextEditingController();
-
+  File? selectedImage;
   final String _baseUrl =
       'https://tripwonder.onrender.com/api/v1/auth/save-infor';
 
   UserManager userManager = UserManager();
   bool _showPassword = false;
   bool _showConfirmPassword = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _mediaService = _getIt.get<MediaService>();
+    _storageService = _getIt.get<StorageService>();
+  }
 
   Future<void> _signup() async {
     final String? email = userManager.email;
@@ -47,6 +61,10 @@ class _SignupScreenState extends State<SignupScreen> {
     final String address = _addressController.text;
     final String gender = selectedGender.value ?? 'Other';
     final String? fcmtoken = TokenManager().fcmToken;
+
+    final String? pfpURL = await _storageService.uploadUserPfp(
+      file: selectedImage!,
+    );
 
     if (confirmPassword != password) {
       Get.snackbar(
@@ -80,7 +98,8 @@ class _SignupScreenState extends State<SignupScreen> {
       'password': password,
       'address': address,
       'gender': gender.toUpperCase(),
-      'FCMToken': fcmtoken, // Thay thế bằng FCM token thực tế của bạn
+      'FCMToken': fcmtoken,
+      'image' : pfpURL,
     };
 
     print("Đây là data aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: $data");
@@ -90,6 +109,7 @@ class _SignupScreenState extends State<SignupScreen> {
     print(password);
     print(gender);
     print(fcmtoken);
+    print(pfpURL);
 
     final Uri url = Uri.parse(_baseUrl);
 
@@ -147,6 +167,9 @@ class _SignupScreenState extends State<SignupScreen> {
               Form(
                 child: Column(
                   children: [
+                    _pfpSelectionFiled(),
+                    Text('Choose Avatar',
+                        style: Theme.of(context).textTheme.titleSmall),
                     /// Fullname
                     TextFormField(
                       expands: false,
@@ -353,6 +376,25 @@ class _SignupScreenState extends State<SignupScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _pfpSelectionFiled() {
+    return GestureDetector(
+      onTap: () async {
+        File? file = await _mediaService.getImageFromGallery();
+        if (file != null) {
+          setState(() {
+            selectedImage = file;
+          });
+        }
+      },
+      child: CircleAvatar(
+        radius: MediaQuery.of(context).size.width * 0.15,
+        backgroundImage: selectedImage != null
+            ? FileImage(selectedImage!)
+            : NetworkImage(PLACEHOLDER_PFF) as ImageProvider,
       ),
     );
   }

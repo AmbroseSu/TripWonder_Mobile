@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "659188188065",
+    "project_id": "tripwonder-63139",
+    "storage_bucket": "tripwonder-63139.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659188188065:android:83c07970867e04962a41e0",
+        "android_client_info": {
+          "package_name": "com.tpp.tripwonder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbumL1YLQLVf2aV9ti_owPzMk_hMRHgtA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

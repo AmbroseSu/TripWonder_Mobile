@@ -27,6 +27,12 @@ dependencies:
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
   flutter_svg: ^2.0.10+1
+  firebase_core: ^2.27.1
+  firebase_auth: ^4.17.9
+  firebase_storage: ^11.6.10
+  firebase_analytics: ^10.8.10
+  get_it: ^7.6.7
+  image_picker: ^1.0.7
   flutter_native_splash: ^2.4.1
   iconsax: ^0.0.8
   get: ^4.6.5
