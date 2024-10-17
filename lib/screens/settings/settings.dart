@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tripwonder/screens/explore_screen.dart';
 import 'package:tripwonder/screens/product_detail/all_tours.dart';
 import 'package:tripwonder/screens/product_detail/favorite.dart';
 import 'package:tripwonder/screens/signup/verify_email.dart';
+import 'package:tripwonder/screens/splash_screen.dart';
 import '../../api/global_variables/user_manage.dart';
 import '../../styles&text&sizes/sizes.dart';
 import '../../styles&text&sizes/text_strings.dart';
@@ -121,7 +123,7 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                        MaterialPageRoute(builder: (context) => SplashScreen()),
                       );
                     },
                     child: Container(

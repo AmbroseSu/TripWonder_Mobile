@@ -16,28 +16,29 @@ import '../widgets/t_rounded_image.dart';
 import 'colors.dart';
 import 'image_strings.dart';
 
-
-
 class TProductCardVertical extends StatelessWidget {
   final String title;
   final String price;
   final String province;
-  final String? gallery; // Thêm trường gallery
+  final String? gallery;
+  final String startTime; // Thêm startTime
+  final String endTime;   // Thêm endTime
 
   const TProductCardVertical({
     super.key,
     required this.title,
     required this.price,
     required this.province,
-    this.gallery, // Thêm tham số gallery vào constructor
+    this.gallery,
+    required this.startTime, // Thêm startTime vào constructor
+    required this.endTime,   // Thêm endTime vào constructor
   });
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
 
-    return
-      GestureDetector(
+    return GestureDetector(
       onTap: () => Get.to(() => const PlaceScreen()),
       child: Container(
         width: 180,
@@ -49,44 +50,33 @@ class TProductCardVertical extends StatelessWidget {
         ),
         child: Column(
           children: [
-            // TRoundedContainer(
-            //   // padding: const EdgeInsets.all(TSizes.sm),
-            //   backgroundColor: dark ? TColors.dark : TColors.light,
-            //   child: Stack(
-            //     children: [
-            //       AspectRatio(
-            //         aspectRatio: 4 ,
-            //         child: TRoundedImage(
-            //           imageUrl: gallery ?? TImages.tokyo, // Sử dụng ảnh từ gallery hoặc ảnh mặc định
-            //           applyImageRadius: true,
-            //           fit: BoxFit.cover,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-
             TRoundedContainer(
               width: 200,
-              // padding: const EdgeInsets.all(TSizes.sm),
               backgroundColor: dark ? TColors.dark : TColors.light,
               child: SizedBox(
                 child: TRoundedImage(
-                  height: 95,
+                  height: 75,
                   imageUrl: gallery ?? TImages.tokyo,
                   applyImageRadius: true,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-
             const SizedBox(height: TSizes.spaceBtwItems / 2),
             Padding(
               padding: const EdgeInsets.only(left: TSizes.sm),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Tiêu đề sản phẩm
                   TProductTitleText(title: title, smallSize: true),
+
+                  // Hiển thị thời gian bắt đầu và kết thúc
+                  Text('$startTime - $endTime',
+                      style: Theme.of(context).textTheme.labelSmall),
+                  // Text('',
+                  //     style: Theme.of(context).textTheme.labelSmall),
+
                   const SizedBox(height: TSizes.spaceBtwItems / 2),
                   Row(
                     children: [
@@ -112,7 +102,7 @@ class TProductCardVertical extends StatelessWidget {
                 ),
                 Container(
                   decoration: const BoxDecoration(
-                    color: TColors.dark,
+                    color: Color(0xFF55B97D),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(TSizes.cardRadiusMd),
                       bottomRight: Radius.circular(TSizes.productImageRadius),
