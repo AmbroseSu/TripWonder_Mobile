@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tripwonder/screens/explore_screen.dart';
+import 'package:tripwonder/screens/password/create_newpass.dart';
 import 'package:tripwonder/screens/product_detail/all_tours.dart';
 import 'package:tripwonder/screens/product_detail/favorite.dart';
 import 'package:tripwonder/screens/signup/verify_email.dart';
@@ -89,7 +90,7 @@ class SettingsScreen extends StatelessWidget {
                   TSettingsMenuTile(icon: Iconsax.folder, title: 'All Tours', subTitle: 'List all tours in TripWonder', onTap: () => Get.to(() => const AllToursScreen())),
                   // TSettingsMenuTile(icon: Iconsax.category, title: 'All Categories', subTitle: 'List all categories in TripWonder', onTap: () => Get.to(() => const CategoryScreen())),
                   TSettingsMenuTile(icon: Iconsax.heart, title: 'Favorite Tours', subTitle: 'List of your favorite tours', onTap: () => Get.to(() => const FavoriteScreen())),
-                  TSettingsMenuTile(icon: Icons.password, title: 'Change Password', subTitle: 'Change your account password with OTP verification', onTap: () => Get.to(() => const VerifyEmailScreen()),),
+                  TSettingsMenuTile(icon: Icons.password, title: 'Change Password', subTitle: 'Change your account password with OTP verification', onTap: () => Get.to(() => const CreateNewpass()),),
                   const TSettingsMenuTile(icon: Iconsax.discount_shape, title: 'Recommend Tours', subTitle: 'List of all the recommend tours'),
                   const TSettingsMenuTile(icon: Iconsax.notification, title: 'Notifications', subTitle: 'Set any kind of notifications message'),
 
