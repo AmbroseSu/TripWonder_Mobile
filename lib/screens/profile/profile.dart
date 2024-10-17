@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tripwonder/service/media_service.dart';
+import 'package:tripwonder/service/storage_service.dart';
 import 'package:tripwonder/styles&text&sizes/colors.dart';
 import '../../api/global_variables/user_manage.dart';
 import '../../styles&text&sizes/image_strings.dart';
@@ -22,12 +26,17 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final GetIt _getIt = GetIt.instance;
+  late StorageService _storageService;
+  late MediaService _mediaService;
   late Future<Map<String, dynamic>> userProfile;
-
+  File? selectedImage;
   @override
   void initState() {
     super.initState();
     userProfile = fetchUserProfile();
+    _mediaService = _getIt.get<MediaService>();
+    _storageService = _getIt.get<StorageService>();
   }
 
   Future<Map<String, dynamic>> fetchUserProfile() async {
@@ -164,7 +173,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  File? file = await _mediaService.getImageFromGallery();
+                                  if (file != null) {
+                                    setState(() {
+                                      selectedImage = file;
+                                    });
+                                  }
+                                  final String? pfpURL = await _storageService.uploadUserPfp(
+                                    file: selectedImage!,
+                                  );
+                                  final updatedData = {
+                                    "id": userId,
+                                    "fullname": user['fullname'],
+                                    "email": user['email'] ?? '',
+                                    "address": user['address'] ?? '',
+                                    "phoneNumber": user['phone'] ?? '',
+                                    "gender": user['gender'] ?? 'MALE',
+                                    "image" : pfpURL ?? '',
+                                    "role": user['role'] ?? 'CUSTOMER',
+                                  };
+                                  updateUserProfile(userId, updatedData).then((_) {
+                                    setState(() {
+                                      user['image'] = pfpURL;
+                                    });
+                                  }).catchError((error) {
+                                    print('Failed to update profile: $error');
+                                  });
+                                },
                                 child: const Text('Change Profile Picture', style: TextStyle(color: TColors.black)),
                               ),
                             ],
@@ -197,6 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             "email": user['email'] ?? '',
                             "address": user['address'] ?? '',
                             "phoneNumber": user['phone'] ?? '',
+                            "image" : user['image'] ?? '',
                             "gender": user['gender'] ?? 'MALE',
                             "role": user['role'] ?? 'CUSTOMER',
                           };
@@ -228,6 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             "email": user['email'] ?? '',
                             "address": newValue,
                             "phoneNumber": user['phone'] ?? '',
+                            "image" : user['image'] ?? '',
                             "gender": user['gender'] ?? 'MALE',
                             "role": user['role'] ?? 'CUSTOMER',
                           };
@@ -278,6 +316,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             "email": user['email'] ?? '',
                             "address": user['address'] ?? '',
                             "phoneNumber": newValue,
+                            "image" : user['image'] ?? '',
                             "gender": user['gender'] ?? 'MALE',
                             "role": user['role'] ?? 'CUSTOMER',
                           };
