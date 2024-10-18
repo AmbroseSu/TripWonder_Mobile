@@ -168,13 +168,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             children: [
                               ClipOval(
-                                child: Image.network(
-                                  user['image'] ?? TImages.user, // Sử dụng Image.network
+                                child: user['image'] != null
+                                    ? Image.network(
+                                  user['image'], // Sử dụng Image.network cho hình ảnh từ API
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover, // Căn chỉnh hình ảnh
+                                )
+                                    : Image.asset(
+                                  TImages.user, // Sử dụng Image.asset cho hình ảnh mặc định
                                   width: 80,
                                   height: 80,
                                   fit: BoxFit.cover, // Căn chỉnh hình ảnh
                                 ),
                               ),
+
                               TextButton(
                                 onPressed: () async {
                                   File? file = await _mediaService.getImageFromGallery();

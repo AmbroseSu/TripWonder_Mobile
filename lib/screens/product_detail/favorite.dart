@@ -18,15 +18,10 @@ class FavoriteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: TAppBar(
-        title:
-            Text('Favorite', style: Theme.of(context).textTheme.headlineMedium), showBackArrow: true,
-        actions: [
-          TCircularIcon(
-            icon: Iconsax.add,
-            onPressed: () => Get.to(const ExploreScreen()),
-          )
-        ],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text('Favorite', style: Theme.of(context).textTheme.headlineMedium),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
