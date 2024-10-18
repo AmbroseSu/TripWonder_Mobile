@@ -1,14 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:tripwonder/screens/explore_screen.dart';
 import 'package:tripwonder/screens/password/create_newpass.dart';
 import 'package:tripwonder/screens/product_detail/all_tours.dart';
 import 'package:tripwonder/screens/product_detail/favorite.dart';
-import 'package:tripwonder/screens/signup/verify_email.dart';
 import 'package:tripwonder/screens/splash_screen.dart';
 import '../../api/global_variables/user_manage.dart';
 import '../../styles&text&sizes/sizes.dart';
@@ -20,7 +17,6 @@ import '../../widgets/settings_menu_tile.dart';
 import '../../widgets/user_profile_tile.dart';
 import '../address/address.dart';
 import '../cart/cart.dart';
-import '../login/login.dart';
 import '../order/order.dart';
 import 'package:http/http.dart' as http;
 import '../profile/profile.dart';

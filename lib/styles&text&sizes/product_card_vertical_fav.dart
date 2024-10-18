@@ -14,9 +14,21 @@ import '../widgets/t_rounded_image.dart';
 import 'colors.dart';
 import 'image_strings.dart';
 
-
 class TProductCardVerticalFav extends StatelessWidget {
-  const TProductCardVerticalFav({super.key});
+  final String title;
+  final String price;
+  final String startTime;
+  final String endTime;
+  final String imageUrl;
+
+  const TProductCardVerticalFav({
+    super.key,
+    required this.title,
+    required this.price,
+    required this.startTime,
+    required this.endTime,
+    required this.imageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,26 +51,13 @@ class TProductCardVerticalFav extends StatelessWidget {
               backgroundColor: dark ? TColors.dark : TColors.light,
               child: Stack(
                 children: [
-                  const AspectRatio(
-                    aspectRatio: 4 / 4,
+                  AspectRatio(
+                    aspectRatio: 4 / 3.1,
                     child: TRoundedImage(
-                      imageUrl: TImages.tokyo,
+                      imageUrl: imageUrl,
                       applyImageRadius: true,
                       fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned(
-                    top: 12,
-                    child: TRoundedContainer(
-                      radius: TSizes.sm,
-                      backgroundColor: TColors.secondary.withOpacity(0.8),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: TSizes.sm, vertical: TSizes.xs),
-                      child: Text('25%',
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
-                              .apply(color: TColors.black)),
+                      isNetworkImage: true, // Flag để sử dụng `Image.network`
                     ),
                   ),
                   const Positioned(
@@ -75,9 +74,15 @@ class TProductCardVerticalFav extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const TProductTitleText(title: 'Greek Island', smallSize: true),
+                  // Title
+                  TProductTitleText(title: title, smallSize: true),
                   const SizedBox(height: TSizes.spaceBtwItems / 2),
-                  Row(
+                  // Start time and end time
+                  Text('$startTime - $endTime',
+                      style: Theme.of(context).textTheme.labelSmall),
+              const SizedBox(height: TSizes.spaceBtwItems / 2),
+
+              Row(
                     children: [
                       Text('Travel',
                           overflow: TextOverflow.ellipsis,
@@ -88,20 +93,20 @@ class TProductCardVerticalFav extends StatelessWidget {
                           color: TColors.primary, size: TSizes.iconXs),
                     ],
                   ),
-                ],
+              ],
               ),
             ),
             const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: TSizes.sm),
-                  child: TProductPriceText(price: '50'),
+                Padding(
+                  padding: const EdgeInsets.only(left: TSizes.sm),
+                  child: TProductPriceText(price: price),
                 ),
                 Container(
                   decoration: const BoxDecoration(
-                    color: TColors.dark,
+                    color: Color(0xFF55B97D),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(TSizes.cardRadiusMd),
                       bottomRight: Radius.circular(TSizes.productImageRadius),

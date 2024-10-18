@@ -14,132 +14,24 @@ import '../widgets/rounded_container.dart';
 import '../widgets/t_circular_icon.dart';
 import '../widgets/t_rounded_image.dart';
 import 'colors.dart';
-import 'image_strings.dart';
-//
-// class TProductCardVertical extends StatelessWidget {
-//   final String title;
-//   final String price;
-//   final String province;
-//   final String? gallery;
-//   final String startTime; // Thêm startTime
-//   final String endTime;   // Thêm endTime
-//
-//   const TProductCardVertical({
-//     super.key,
-//     required this.title,
-//     required this.price,
-//     required this.province,
-//     this.gallery,
-//     required this.startTime, // Thêm startTime vào constructor
-//     required this.endTime,   // Thêm endTime vào constructor
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final dark = THelperFunctions.isDarkMode(context);
-//
-//     return GestureDetector(
-//       onTap: () => Get.to(() => const PlaceScreen()),
-//       child: Container(
-//         width: 180,
-//         padding: const EdgeInsets.all(1),
-//         decoration: BoxDecoration(
-//           boxShadow: [TShadowStyle.verticalProductShadow],
-//           borderRadius: BorderRadius.circular(TSizes.productImageRadius),
-//           color: dark ? TColors.darkGrey : TColors.white,
-//         ),
-//         child: Column(
-//           children: [
-//             TRoundedContainer(
-//               width: 200,
-//               backgroundColor: dark ? TColors.dark : TColors.light,
-//               child: SizedBox(
-//                 child: TRoundedImage(
-//                   height: 75,
-//                   imageUrl: gallery ?? TImages.tokyo,
-//                   applyImageRadius: true,
-//                   fit: BoxFit.cover,
-//                 ),
-//               ),
-//             ),
-//             const SizedBox(height: TSizes.spaceBtwItems / 2),
-//             Padding(
-//               padding: const EdgeInsets.only(left: TSizes.sm),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   // Tiêu đề sản phẩm
-//                   TProductTitleText(title: title, smallSize: true),
-//
-//                   // Hiển thị thời gian bắt đầu và kết thúc
-//                   Text('$startTime - $endTime',
-//                       style: Theme.of(context).textTheme.labelSmall),
-//                   // Text('',
-//                   //     style: Theme.of(context).textTheme.labelSmall),
-//
-//                   const SizedBox(height: TSizes.spaceBtwItems / 2),
-//                   Row(
-//                     children: [
-//                       Text(province,
-//                           overflow: TextOverflow.ellipsis,
-//                           maxLines: 1,
-//                           style: Theme.of(context).textTheme.labelMedium),
-//                       const SizedBox(width: TSizes.xs),
-//                       const Icon(Iconsax.verify5,
-//                           color: TColors.primary, size: TSizes.iconXs),
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             const Spacer(),
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Padding(
-//                   padding: const EdgeInsets.only(left: TSizes.sm),
-//                   child: TProductPriceText(price: price),
-//                 ),
-//                 Container(
-//                   decoration: const BoxDecoration(
-//                     color: Color(0xFF55B97D),
-//                     borderRadius: BorderRadius.only(
-//                       topLeft: Radius.circular(TSizes.cardRadiusMd),
-//                       bottomRight: Radius.circular(TSizes.productImageRadius),
-//                     ),
-//                   ),
-//                   child: const SizedBox(
-//                     width: TSizes.iconLg * 1.2,
-//                     height: TSizes.iconLg * 1.2,
-//                     child: Center(child: Icon(Iconsax.add, color: TColors.white)),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 
 class TProductCardVertical extends StatelessWidget {
   final String title;
   final String price;
-  final String province;
-  final String? gallery;
   final String startTime;
   final String endTime;
+  final String gallery;
+  final String province;
+
 
   const TProductCardVertical({
     super.key,
     required this.title,
     required this.price,
-    required this.province,
-    this.gallery,
     required this.startTime,
+    required this.province,
     required this.endTime,
+    required this.gallery,
   });
 
   @override
@@ -159,25 +51,25 @@ class TProductCardVertical extends StatelessWidget {
         child: Column(
           children: [
             TRoundedContainer(
-              width: 200,
+              padding: const EdgeInsets.all(TSizes.sm),
               backgroundColor: dark ? TColors.dark : TColors.light,
-              child: SizedBox(
-                child: gallery != null
-                    ? ClipRRect(
-                  borderRadius: BorderRadius.circular(TSizes.productImageRadius),
-                  child: Image.network(
-                    gallery!, // Sử dụng gallery cho Image.network
-                    height: 75,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.error); // Hiển thị icon lỗi nếu không tải được hình
-                    },
+              child: Stack(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 4 / 3.1,
+                    child: TRoundedImage(
+                      imageUrl: gallery,
+                      applyImageRadius: true,
+                      fit: BoxFit.cover,
+                      isNetworkImage: true, // Flag để sử dụng `Image.network`
+                    ),
                   ),
-                )
-                    : Container(
-                  height: 75,
-                  color: TColors.grey, // Màu nền nếu không có hình
-                ),
+                  const Positioned(
+                    top: 0,
+                    right: 0,
+                    child: TCircularIcon(icon: Iconsax.heart5, color: Colors.red),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: TSizes.spaceBtwItems / 2),
@@ -186,10 +78,14 @@ class TProductCardVertical extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Title
                   TProductTitleText(title: title, smallSize: true),
+                  const SizedBox(height: TSizes.spaceBtwItems / 2),
+                  // Start time and end time
                   Text('$startTime - $endTime',
                       style: Theme.of(context).textTheme.labelSmall),
                   const SizedBox(height: TSizes.spaceBtwItems / 2),
+
                   Row(
                     children: [
                       Text(province,
@@ -201,6 +97,17 @@ class TProductCardVertical extends StatelessWidget {
                           color: TColors.primary, size: TSizes.iconXs),
                     ],
                   ),
+                  // Row(
+                  //   children: [
+                  //     Text('Travel',
+                  //         overflow: TextOverflow.ellipsis,
+                  //         maxLines: 1,
+                  //         style: Theme.of(context).textTheme.labelMedium),
+                  //     const SizedBox(width: TSizes.xs),
+                  //     const Icon(Iconsax.verify5,
+                  //         color: TColors.primary, size: TSizes.iconXs),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
@@ -225,9 +132,9 @@ class TProductCardVertical extends StatelessWidget {
                     height: TSizes.iconLg * 1.2,
                     child: Center(child: Icon(Iconsax.add, color: TColors.white)),
                   ),
-                ),
+                )
               ],
-            ),
+            )
           ],
         ),
       ),
