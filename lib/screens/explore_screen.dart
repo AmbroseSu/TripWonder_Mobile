@@ -289,7 +289,7 @@ class _ExploreScreenState extends State<ExploreScreen>
             duration: "4N/5D",
             deal: "Hot Deal",
             image: "assets/images/rectangle_9921.jpeg",
-            onTap: () => Get.to(() => const PlaceScreen()),
+            onTap: () => Get.to(() => const PlaceScreen(title: '', price: '', province: '', startTime: '', endTime: '', shortDescription: '', description: '', gallery: '',)),
           ),
           SizedBox(width: 16),
           RecommendCard(
@@ -297,7 +297,7 @@ class _ExploreScreenState extends State<ExploreScreen>
             duration: "2N/3D",
             deal: "New Deal",
             image: TImages.tokyo,
-            onTap: () => Get.to(() => const PlaceScreen()),
+            onTap: () => Get.to(() => const PlaceScreen(title: '', price: '', province: '', startTime: '', endTime: '', shortDescription: '', description: '', gallery: '',)),
           ),
           SizedBox(width: 16),
           RecommendCard(
@@ -305,7 +305,7 @@ class _ExploreScreenState extends State<ExploreScreen>
             duration: "2N/3D",
             deal: "Hot Deal",
             image: TImages.lima,
-            onTap: () => Get.to(() => const PlaceScreen()),
+            onTap: () => Get.to(() => const PlaceScreen(title: '', price: '', province: '', startTime: '', endTime: '', shortDescription: '', description: '', gallery: '',)),
           ),
         ],
       ),

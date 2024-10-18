@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,7 +21,8 @@ class TProductCardVertical extends StatelessWidget {
   final String endTime;
   final String gallery;
   final String province;
-
+  final String shortDescription;
+  final String description;
 
   const TProductCardVertical({
     super.key,
@@ -32,6 +32,8 @@ class TProductCardVertical extends StatelessWidget {
     required this.province,
     required this.endTime,
     required this.gallery,
+    required this.shortDescription,
+    required this.description,
   });
 
   @override
@@ -39,7 +41,23 @@ class TProductCardVertical extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     return GestureDetector(
-      onTap: () => Get.to(() => const PlaceScreen()),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlaceScreen(
+              title: title,
+              price: price,
+              province: province,
+              gallery: gallery,
+              startTime: startTime,
+              endTime: endTime,
+              shortDescription: shortDescription,
+              description: description,
+            ),
+          ),
+        );
+      },
       child: Container(
         width: 180,
         padding: const EdgeInsets.all(1),
@@ -125,7 +143,8 @@ class TProductCardVertical extends StatelessWidget {
                   child: const SizedBox(
                     width: TSizes.iconLg * 1.2,
                     height: TSizes.iconLg * 1.2,
-                    child: Center(child: Icon(Iconsax.add, color: TColors.white)),
+                    child:
+                        Center(child: Icon(Iconsax.add, color: TColors.white)),
                   ),
                 )
               ],
@@ -136,4 +155,3 @@ class TProductCardVertical extends StatelessWidget {
     );
   }
 }
-

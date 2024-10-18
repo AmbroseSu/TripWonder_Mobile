@@ -18,7 +18,7 @@ class PopularItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PlaceScreen(),));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => PlaceScreen(title: '', price: '', province: '', startTime: '', endTime: '', shortDescription: '', description: '', gallery: '',),));
       },
       child: Container(
         width: 240,
