@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tripwonder/screens/password/create_newpass.dart';
 import 'package:tripwonder/screens/product_detail/all_tours.dart';
 import 'package:tripwonder/screens/product_detail/favorite.dart';
 import 'package:tripwonder/screens/signup/verify_email.dart';
@@ -33,7 +34,8 @@ class SettingsScreen extends StatelessWidget {
     }
 
     final response = await http.get(
-      Uri.parse("https://tripwonder.onrender.com/api/v1/user/get-user-by-id?userId=$userId"),
+      Uri.parse(
+          "https://tripwonder.onrender.com/api/v1/user/get-user-by-id?userId=$userId"),
     );
 
     if (response.statusCode == 200) {
@@ -60,17 +62,18 @@ class SettingsScreen extends StatelessWidget {
                 children: [
                   /// AppBar
                   const TAppBar(
-                    title: Text('Account', style: TextStyle(color: Colors.white, fontSize: 35)),
+                    title: Text('Account',
+                        style: TextStyle(color: Colors.white, fontSize: 35)),
                   ),
                   const SizedBox(height: TSizes.spaceBtwSections),
 
                   /// User Profile Card
-                  TUserProfileTile(onPressed: () => Get.to(() => const ProfileScreen())),
+                  TUserProfileTile(
+                      onPressed: () => Get.to(() => const ProfileScreen())),
                   const SizedBox(height: TSizes.spaceBtwSections),
                 ],
               ),
             ),
-
 
             /// -- Body
             Padding(
@@ -78,24 +81,62 @@ class SettingsScreen extends StatelessWidget {
               child: Column(
                 children: [
                   /// -- Account Settings
-                  const TSectionHeading(title: 'Account Settings', showActionButton: false),
+                  const TSectionHeading(
+                      title: 'Account Settings', showActionButton: false),
                   const SizedBox(height: TSizes.spaceBtwItems),
 
-                  TSettingsMenuTile(icon: Iconsax.safe_home, title: 'My Addresses', subTitle: 'Set shopping delivery address', onTap: () => Get.to(() => const UserAddressScreen()),),
-                  TSettingsMenuTile(icon: Iconsax.shopping_cart, title: 'Order', subTitle: 'Add, remove products and move to checkout', onTap: () => Get.to(() => const CartScreen())),
-                  TSettingsMenuTile(icon: Iconsax.bag_tick, title: 'My Booking', subTitle: 'In-progress and Completed Orders', onTap: () => Get.to(() => const OrderScreen())),
-                  TSettingsMenuTile(icon: Iconsax.folder, title: 'All Tours', subTitle: 'List all tours in TripWonder', onTap: () => Get.to(() => const AllToursScreen())),
+                  TSettingsMenuTile(
+                    icon: Iconsax.safe_home,
+                    title: 'My Addresses',
+                    subTitle: 'Set shopping delivery address',
+                    onTap: () => Get.to(() => const UserAddressScreen()),
+                  ),
+                  TSettingsMenuTile(
+                      icon: Iconsax.shopping_cart,
+                      title: 'Order',
+                      subTitle: 'Add, remove products and move to checkout',
+                      onTap: () => Get.to(() => const CartScreen())),
+                  TSettingsMenuTile(
+                      icon: Iconsax.bag_tick,
+                      title: 'My Booking',
+                      subTitle: 'In-progress and Completed Orders',
+                      onTap: () => Get.to(() => const OrderScreen())),
+                  TSettingsMenuTile(
+                      icon: Iconsax.folder,
+                      title: 'All Tours',
+                      subTitle: 'List all tours in TripWonder',
+                      onTap: () => Get.to(() => const AllToursScreen())),
                   // TSettingsMenuTile(icon: Iconsax.category, title: 'All Categories', subTitle: 'List all categories in TripWonder', onTap: () => Get.to(() => const CategoryScreen())),
-                  TSettingsMenuTile(icon: Iconsax.heart, title: 'Favorite Tours', subTitle: 'List of your favorite tours', onTap: () => Get.to(() => const FavoriteScreen())),
-                  TSettingsMenuTile(icon: Icons.password, title: 'Change Password', subTitle: 'Change your account password with OTP verification', onTap: () => Get.to(() => const VerifyEmailScreen()),),
-                  const TSettingsMenuTile(icon: Iconsax.discount_shape, title: 'Recommend Tours', subTitle: 'List of all the recommend tours'),
-                  const TSettingsMenuTile(icon: Iconsax.notification, title: 'Notifications', subTitle: 'Set any kind of notifications message'),
+                  TSettingsMenuTile(
+                      icon: Iconsax.heart,
+                      title: 'Favorite Tours',
+                      subTitle: 'List of your favorite tours',
+                      onTap: () => Get.to(() => const FavoriteScreen())),
+                  TSettingsMenuTile(
+                    icon: Icons.password,
+                    title: 'Change Password',
+                    subTitle:
+                        'Change your account password with OTP verification',
+                    onTap: () => Get.to(() => const CreateNewpass()),
+                  ),
+                  const TSettingsMenuTile(
+                      icon: Iconsax.discount_shape,
+                      title: 'Recommend Tours',
+                      subTitle: 'List of all the recommend tours'),
+                  const TSettingsMenuTile(
+                      icon: Iconsax.notification,
+                      title: 'Notifications',
+                      subTitle: 'Set any kind of notifications message'),
 
                   /// -- App Settings
                   const SizedBox(height: TSizes.spaceBtwSections),
-                  const TSectionHeading(title: 'App Settings', showActionButton: false),
+                  const TSectionHeading(
+                      title: 'App Settings', showActionButton: false),
                   const SizedBox(height: TSizes.spaceBtwItems),
-                  const TSettingsMenuTile(icon: Iconsax.document_upload, title: 'Load Data', subTitle: 'Upload Data to your Cloud Firebase'),
+                  const TSettingsMenuTile(
+                      icon: Iconsax.document_upload,
+                      title: 'Load Data',
+                      subTitle: 'Upload Data to your Cloud Firebase'),
                   TSettingsMenuTile(
                     icon: Iconsax.location,
                     title: 'Geolocation',

@@ -21,7 +21,6 @@ import 'package:tripwonder/widgets/login_signup/social_buttons.dart';
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
-
   @override
   _SignupScreenState createState() => _SignupScreenState();
 }
@@ -99,7 +98,7 @@ class _SignupScreenState extends State<SignupScreen> {
       'address': address,
       'gender': gender.toUpperCase(),
       'FCMToken': fcmtoken,
-      'image' : pfpURL,
+      'image': pfpURL,
     };
 
     print("Đây là data aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: $data");
@@ -170,6 +169,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     _pfpSelectionFiled(),
                     Text('Choose Avatar',
                         style: Theme.of(context).textTheme.titleSmall),
+
                     /// Fullname
                     TextFormField(
                       expands: false,
@@ -196,6 +196,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     TextFormField(
                       expands: false,
                       controller: _passwordController,
+                      obscureText: !_showPassword,
                       decoration: InputDecoration(
                         labelText: TTexts.password,
                         prefixIcon: const Icon(Iconsax.password_check),
@@ -217,6 +218,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     TextFormField(
                       expands: false,
                       controller: _passwordConfirmController,
+                      obscureText: !_showConfirmPassword,
                       decoration: InputDecoration(
                         labelText: 'Confirm Password',
                         prefixIcon: const Icon(Iconsax.password_check),

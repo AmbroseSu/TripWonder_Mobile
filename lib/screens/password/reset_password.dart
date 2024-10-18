@@ -19,11 +19,15 @@ class ResetPassword extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
-        actions: [IconButton(onPressed: () => Get.back(), icon: const Icon(CupertinoIcons.clear))],
+        actions: [
+          IconButton(
+              onPressed: () => Get.back(),
+              icon: const Icon(CupertinoIcons.clear))
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
-            padding: const EdgeInsets.all(TSizes.defaultSpace),
+          padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
               // /// Image with 60% of screen width
@@ -31,9 +35,13 @@ class ResetPassword extends StatelessWidget {
               // const SizedBox(height: TSizes.spaceBtwSections),
 
               /// Title & SubTitle
-              Text(TTexts.changeYourPasswordTitle, style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
+              Text(TTexts.changeYourPasswordTitle,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                  textAlign: TextAlign.center),
               const SizedBox(height: TSizes.spaceBtwItems),
-              Text(TTexts.changeYourPasswordSubTitle, style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center),
+              Text(TTexts.changeYourPasswordSubTitle,
+                  style: Theme.of(context).textTheme.labelMedium,
+                  textAlign: TextAlign.center),
               const SizedBox(height: TSizes.spaceBtwSections),
 
               /// Buttons
@@ -43,16 +51,14 @@ class ResetPassword extends StatelessWidget {
               // ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LoginScreen()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()));
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 15),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color:  Color(0xFF55B97D),
+                    color: Color(0xFF55B97D),
                   ),
                   child: Center(
                     child: Text(
@@ -68,7 +74,6 @@ class ResetPassword extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: TSizes.spaceBtwItems),
-
             ],
           ),
         ),
