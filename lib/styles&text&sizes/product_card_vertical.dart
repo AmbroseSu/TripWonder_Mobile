@@ -64,11 +64,6 @@ class TProductCardVertical extends StatelessWidget {
                       isNetworkImage: true, // Flag để sử dụng `Image.network`
                     ),
                   ),
-                  const Positioned(
-                    top: 0,
-                    right: 0,
-                    child: TCircularIcon(icon: Iconsax.heart5, color: Colors.red),
-                  ),
                 ],
               ),
             ),
