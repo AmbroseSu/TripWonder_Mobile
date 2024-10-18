@@ -39,6 +39,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _storageService = _getIt.get<StorageService>();
   }
 
+  // Future<Map<String, dynamic>> fetchUserProfile() async {
+  //   final int? userId = UserManager().id;
+  //
+  //   if (userId == null) {
+  //     throw Exception('User ID is null');
+  //   }
+  //
+  //   final response = await http.get(
+  //     Uri.parse("https://tripwonder.onrender.com/api/v1/user/get-user-by-id?userId=$userId"),
+  //   );
+  //
+  //   if (response.statusCode == 200) {
+  //     final data = json.decode(response.body);
+  //     return data['content'];
+  //   } else if (response.statusCode == 404) {
+  //     throw Exception('User not found: ${response.reasonPhrase}');
+  //   } else {
+  //     throw Exception('Failed to load user profile: ${response.reasonPhrase}');
+  //   }
+  // }
+
   Future<Map<String, dynamic>> fetchUserProfile() async {
     final int? userId = UserManager().id;
 
@@ -51,7 +72,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      // Sử dụng utf-8 để giải mã nội dung
+      final data = json.decode(utf8.decode(response.bodyBytes));
       return data['content'];
     } else if (response.statusCode == 404) {
       throw Exception('User not found: ${response.reasonPhrase}');
@@ -59,6 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       throw Exception('Failed to load user profile: ${response.reasonPhrase}');
     }
   }
+
 
   Future<void> updateUserProfile(int userId, Map<String, dynamic> updatedData) async {
     final response = await http.post(
@@ -231,7 +254,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _showEditProfileDialog(
                         context: context,
                         title: 'Name',
-                        initialValue: user['fullname'] ?? 'N/A',
+                        initialValue: user['fullname'].toString() ?? 'N/A',
                         onSave: (newValue) {
                           final updatedData = {
                             "id": userId,
@@ -263,7 +286,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _showEditProfileDialog(
                         context: context,
                         title: 'Address',
-                        initialValue: user['address'] ?? 'N/A',
+                        initialValue: user['address'].toString() ?? 'N/A',
                         onSave: (newValue) {
                           final updatedData = {
                             "id": userId,

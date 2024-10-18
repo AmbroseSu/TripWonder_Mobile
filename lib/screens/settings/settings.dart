@@ -82,17 +82,17 @@ class SettingsScreen extends StatelessWidget {
                   const TSectionHeading(
                       title: 'Account Settings', showActionButton: false),
                   const SizedBox(height: TSizes.spaceBtwItems),
-
-                  TSettingsMenuTile(
-                      icon: Iconsax.heart,
-                      title: 'Favorite Tours',
-                      subTitle: 'List of your favorite tours',
-                      onTap: () => Get.to(() => const FavoriteScreen())),
                   TSettingsMenuTile(
                       icon: Iconsax.folder,
                       title: 'All Tours',
                       subTitle: 'List all tours in TripWonder',
                       onTap: () => Get.to(() => const AllToursScreen())),
+                  TSettingsMenuTile(
+                      icon: Iconsax.heart,
+                      title: 'Favorite Tours',
+                      subTitle: 'List of your favorite tours',
+                      onTap: () => Get.to(() => const FavoriteScreen())),
+
                   TSettingsMenuTile(
                       icon: Iconsax.shopping_cart,
                       title: 'Order',
