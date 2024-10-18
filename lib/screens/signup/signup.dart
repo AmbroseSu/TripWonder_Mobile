@@ -18,6 +18,8 @@ import 'package:tripwonder/styles&text&sizes/text_strings.dart';
 import 'package:tripwonder/widgets/login_signup/form_divider.dart';
 import 'package:tripwonder/widgets/login_signup/social_buttons.dart';
 
+import '../../styles&text&sizes/colors.dart';
+
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -60,10 +62,17 @@ class _SignupScreenState extends State<SignupScreen> {
     final String address = _addressController.text;
     final String gender = selectedGender.value ?? 'Other';
     final String? fcmtoken = TokenManager().fcmToken;
+    final String? pfpURL;
 
-    final String? pfpURL = await _storageService.uploadUserPfp(
-      file: selectedImage!,
-    );
+    if (selectedImage != null) {
+      pfpURL = await _storageService.uploadUserPfp(
+        file: selectedImage!,
+      );
+    }else{
+      pfpURL = null;
+    }
+
+
 
     if (confirmPassword != password) {
       Get.snackbar(
@@ -167,8 +176,20 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: Column(
                   children: [
                     _pfpSelectionFiled(),
-                    Text('Choose Avatar',
-                        style: Theme.of(context).textTheme.titleSmall),
+                    TextButton(
+                      onPressed: () async {
+                        File? file = await _mediaService.getImageFromGallery();
+                        if (file != null) {
+                          setState(() {
+                            selectedImage = file;
+                          });
+                        }
+                      },
+                      child: const Text(
+                        'Choose Profile Picture',
+                        style: TextStyle(color: TColors.black),
+                      ),
+                    ),
 
                     /// Fullname
                     TextFormField(
