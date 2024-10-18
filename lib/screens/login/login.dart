@@ -46,48 +46,50 @@ class LoginScreen extends StatelessWidget {
       //   ],
       // ),
 
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back), // Thay đổi icon theo ý muốn
-          onPressed: () {
-            Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => SplashScreen()),
-                        );
-            // Xử lý sự kiện khi nhấn vào icon
-          },
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(30.0), // Chiều cao tùy chỉnh cho AppBar
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: Container(
+            alignment: Alignment.center, // Căn giữa
+            child: IconButton(
+              icon: Icon(Icons.arrow_back), // Thay đổi icon theo ý muốn
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => SplashScreen()),
+                );
+                // Xử lý sự kiện khi nhấn vào icon
+              },
+            ),
+          ),
         ),
       ),
 
-
-
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
+        child: Padding(
+          padding: TSpacingStyle.paddingWithAppBarHeight,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ///Logo, Title & Sub-Title
+              TLoginHeader(),
 
-          child: Padding(
-        padding: TSpacingStyle.paddingWithAppBarHeight,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+              /// Form
+              TLoginForm(),
 
-          children: [
-            ///Logo, Title & Sub-Title
-            TLoginHeader(),
+              /// Divider
+              TFormDivider(dividerText: TTexts.orSignInWith.capitalize!),
+              const SizedBox(height: TSizes.spaceBtwItems),
 
-            /// Form
-            TLoginForm(),
-
-            /// Divider
-            TFormDivider(dividerText: TTexts.orSignInWith.capitalize!),
-            const SizedBox(height: TSizes.spaceBtwItems),
-
-            /// Footer
-            TSocialButtons(),
-          ],
+              /// Footer
+              TSocialButtons(),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }

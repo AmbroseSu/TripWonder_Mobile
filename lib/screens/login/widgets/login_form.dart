@@ -149,7 +149,7 @@ Widget build(BuildContext context) {
   return Form(
     child: Padding(
       padding: const EdgeInsets.symmetric(
-          vertical: TSizes.spaceBtwSections),
+          vertical: TSizes.defaultSpace),
       child: Column(
         children: [
 
