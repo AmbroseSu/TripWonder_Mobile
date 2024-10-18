@@ -165,10 +165,20 @@ Widget build(BuildContext context) {
           ///Password
           TextFormField(
             controller: _passwordController,
+            obscureText: !_showPassword,
             decoration: InputDecoration(
-              prefixIcon: Icon(Iconsax.password_check),
+              prefixIcon: const Icon(Iconsax.password_check),
               labelText: TTexts.password,
-              suffixIcon: Icon(Iconsax.eye_slash),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _showPassword ? Iconsax.eye : Iconsax.eye_slash,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _showPassword = !_showPassword;
+                  });
+                },
+              ),
             ),
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields / 2),

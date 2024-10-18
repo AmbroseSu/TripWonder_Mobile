@@ -142,7 +142,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
 
           final user = snapshot.data!;
+          print("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+          print(user['phoneNumber']);
           final int userId = user['id'];
+
 
           return SingleChildScrollView(
             child: Padding(
@@ -316,7 +319,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _showEditProfileDialog(
                         context: context,
                         title: 'Phone Number',
-                        initialValue: user['phone'] ?? 'N/A',
+                        initialValue: user['phoneNumber'] ?? 'N/A',
                         onSave: (newValue) {
                           final updatedData = {
                             "id": userId,
@@ -331,7 +334,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                           updateUserProfile(userId, updatedData).then((_) {
                             setState(() {
-                              user['phone'] = newValue;
+                              user['phoneNumber'] = newValue;
                             });
                           }).catchError((error) {
                             print('Failed to update profile: $error');
@@ -340,7 +343,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                     title: 'Phone Number',
-                    value: user['phone'] ?? 'N/A',
+                    value: user['phoneNumber'] ?? 'N/A',
                   ),
 
                   TProfileMenu(
