@@ -119,15 +119,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: TAppBar(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text('Profile', style: Theme.of(context).textTheme.headlineMedium),
-        showBackArrow: true,
-        actions: [
-          TCircularIcon(
-            icon: Iconsax.add,
-            onPressed: () => {},
-          )
-        ],
+        centerTitle: true,
       ),
       body:
       FutureBuilder<Map<String, dynamic>>(

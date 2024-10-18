@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:tripwonder/screens/search/search_result.dart';
 import '../widgets/popular_item.dart';
 import '../widgets/recommend_item.dart';
 import '../widgets/promo_slider.dart';
@@ -115,6 +116,52 @@ class _ExploreScreenState extends State<ExploreScreen>
     );
   }
 
+  // Widget _buildSearchBar() {
+  //   return Padding(
+  //     padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+  //     child: Container(
+  //       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+  //       decoration: BoxDecoration(
+  //         color: Color(0xFFF3F8FE),
+  //         borderRadius: BorderRadius.circular(24),
+  //       ),
+  //       child: TextField(
+  //         decoration: InputDecoration(
+  //           hintText: "Find places to visit",
+  //           border: InputBorder.none,
+  //           prefixIcon: Icon(Icons.search),
+  //           hintStyle: GoogleFonts.montserrat(color: Colors.grey), // Thêm style cho hintText
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // Widget _buildSearchBar() {
+  //   return Padding(
+  //     padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+  //     child: Container(
+  //       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+  //       decoration: BoxDecoration(
+  //         color: Color(0xFFF3F8FE),
+  //         borderRadius: BorderRadius.circular(24),
+  //       ),
+  //       child: TextField(
+  //         decoration: InputDecoration(
+  //           hintText: "Find places to visit",
+  //           border: InputBorder.none,
+  //           prefixIcon: Icon(Icons.search),
+  //           hintStyle: GoogleFonts.montserrat(color: Colors.grey),
+  //         ),
+  //         onSubmitted: (query) {
+  //           if (query.isNotEmpty) {
+  //             Get.to(() => SearchResult(Vaquery: query));
+  //           }
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
   Widget _buildSearchBar() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
@@ -129,12 +176,18 @@ class _ExploreScreenState extends State<ExploreScreen>
             hintText: "Find places to visit",
             border: InputBorder.none,
             prefixIcon: Icon(Icons.search),
-            hintStyle: GoogleFonts.montserrat(color: Colors.grey), // Thêm style cho hintText
+            hintStyle: GoogleFonts.montserrat(color: Colors.grey),
           ),
+          onSubmitted: (query) {
+            if (query.isNotEmpty) {
+              Get.to(() => SearchResult(query: query)); // Đúng tên tham số là 'query'
+            }
+          },
         ),
       ),
     );
   }
+
 
   Widget _buildTabBar() {
     if (_categories.isEmpty) {

@@ -84,11 +84,15 @@ class SettingsScreen extends StatelessWidget {
                   const SizedBox(height: TSizes.spaceBtwItems),
 
                   TSettingsMenuTile(
-                    icon: Iconsax.safe_home,
-                    title: 'My Addresses',
-                    subTitle: 'Set shopping delivery address',
-                    onTap: () => Get.to(() => const UserAddressScreen()),
-                  ),
+                      icon: Iconsax.heart,
+                      title: 'Favorite Tours',
+                      subTitle: 'List of your favorite tours',
+                      onTap: () => Get.to(() => const FavoriteScreen())),
+                  TSettingsMenuTile(
+                      icon: Iconsax.folder,
+                      title: 'All Tours',
+                      subTitle: 'List all tours in TripWonder',
+                      onTap: () => Get.to(() => const AllToursScreen())),
                   TSettingsMenuTile(
                       icon: Iconsax.shopping_cart,
                       title: 'Order',
@@ -100,16 +104,16 @@ class SettingsScreen extends StatelessWidget {
                       subTitle: 'In-progress and Completed Orders',
                       onTap: () => Get.to(() => const OrderScreen())),
                   TSettingsMenuTile(
-                      icon: Iconsax.folder,
-                      title: 'All Tours',
-                      subTitle: 'List all tours in TripWonder',
-                      onTap: () => Get.to(() => const AllToursScreen())),
+                    icon: Iconsax.safe_home,
+                    title: 'My Addresses',
+                    subTitle: 'Set shopping delivery address',
+                    onTap: () => Get.to(() => const UserAddressScreen()),
+                  ),
+
+
+
                   // TSettingsMenuTile(icon: Iconsax.category, title: 'All Categories', subTitle: 'List all categories in TripWonder', onTap: () => Get.to(() => const CategoryScreen())),
-                  TSettingsMenuTile(
-                      icon: Iconsax.heart,
-                      title: 'Favorite Tours',
-                      subTitle: 'List of your favorite tours',
-                      onTap: () => Get.to(() => const FavoriteScreen())),
+
                   TSettingsMenuTile(
                     icon: Icons.password,
                     title: 'Change Password',

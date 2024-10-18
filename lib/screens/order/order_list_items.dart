@@ -46,7 +46,8 @@ class TOrderListItems extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => Get.to(() => MyTripScreen()), // Truyền packageId tại đây
+                  // onPressed: () => Get.to(() => MyTripScreen()), // Truyền packageId tại đây
+                  onPressed: () => Get.to(() => PlaceScreen()),
                   icon: const Icon(Iconsax.arrow_right_34, size: TSizes.iconSm),
                 ),
               ],
