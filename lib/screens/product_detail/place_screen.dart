@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tripwonder/screens/cart/cart.dart';
 import 'package:tripwonder/screens/checkout/checkout.dart';
 import 'package:tripwonder/screens/product_detail/product_reviews.dart';
 import 'package:tripwonder/styles&text&sizes/sizes.dart';
@@ -365,7 +366,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () => Get.to(() => const CheckoutScreen()),
+                onTap: () => Get.to(() => const CartScreen()),
                 child: Container(
                   height: 60,
                   width: MediaQuery.of(context).size.width / 2,

@@ -21,15 +21,10 @@ class ProductReviewsScreen extends StatelessWidget {
       backgroundColor: Colors.white,
 
       /// -- Appbar
-      appBar: TAppBar(
-        title:
-        Text('Reviews & Ratings', style: Theme.of(context).textTheme.headlineMedium), showBackArrow: true,
-        actions: [
-          TCircularIcon(
-            icon: Iconsax.add,
-            onPressed: () {},
-          )
-        ],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text('Reviews & Ratings', style: Theme.of(context).textTheme.headlineMedium),
+        centerTitle: true,
       ),
       /// -- Body
       body: SingleChildScrollView(

@@ -107,7 +107,6 @@ class _TSingleAddressState extends State<TSingleAddress> {
       print('Error fetching user profile: $e');
     }
   }
-
   Future<Map<String, dynamic>> fetchUserProfile() async {
     final int? userId = UserManager().id;
 
@@ -120,7 +119,8 @@ class _TSingleAddressState extends State<TSingleAddress> {
     );
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      // Sử dụng utf-8 để giải mã nội dung
+      final data = json.decode(utf8.decode(response.bodyBytes));
       return data['content'];
     } else if (response.statusCode == 404) {
       throw Exception('User not found: ${response.reasonPhrase}');
@@ -128,7 +128,6 @@ class _TSingleAddressState extends State<TSingleAddress> {
       throw Exception('Failed to load user profile: ${response.reasonPhrase}');
     }
   }
-
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
@@ -180,7 +179,7 @@ class _TSingleAddressState extends State<TSingleAddress> {
               ),
               const SizedBox(height: TSizes.sm / 2),
               Text(
-                userProfile?['address'] ??
+                userProfile?['address'].toString() ??
                     '82356 Timmy Coves, South Liana, Maine, 87665, USA',
                 softWrap: true,
               ),
