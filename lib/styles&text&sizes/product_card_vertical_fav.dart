@@ -35,7 +35,7 @@ class TProductCardVerticalFav extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     return GestureDetector(
-      onTap: () => Get.to(() => const PlaceScreen()),
+      onTap: () => Get.to(() => const PlaceScreen(title: '', price: '', province: '', startTime: '', endTime: '', shortDescription: '', description: '', gallery: '',)),
       child: Container(
         width: 180,
         padding: const EdgeInsets.all(1),

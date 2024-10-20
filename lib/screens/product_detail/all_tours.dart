@@ -98,6 +98,8 @@ class _AllToursScreenState extends State<AllToursScreen> {
             gallery: imageUrl.toString(), // Sử dụng imageUrl
             startTime: tour['startTime'] != null ? formatDate(tour['startTime']) : 'N/A',
             endTime: tour['endTime'] != null ? formatDate(tour['endTime']) : 'N/A',
+            shortDescription : tour['shortDescription'].toString(),
+              description : tour['description'].toString(),
                   );
                 },
               ),

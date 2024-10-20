@@ -13,14 +13,32 @@ import '../../styles&text&sizes/image_strings.dart';
 import '../../widgets/promo_slider.dart';
 
 class PlaceScreen extends StatefulWidget {
-  const PlaceScreen({super.key});
+  final String title;
+  final String price;
+  final String province;
+  final String? gallery;
+  final String startTime;
+  final String endTime;
+  final String shortDescription;
+  final String description;
+
+  const PlaceScreen({
+    Key? key,
+    required this.title,
+    required this.price,
+    required this.province,
+    this.gallery,
+    required this.startTime,
+    required this.endTime,
+    required this.shortDescription,
+    required this.description,
+  }) : super(key: key);
 
   @override
   _PlaceScreenState createState() => _PlaceScreenState();
 }
 
-class _PlaceScreenState extends State<PlaceScreen>{
-
+class _PlaceScreenState extends State<PlaceScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -36,46 +54,98 @@ class _PlaceScreenState extends State<PlaceScreen>{
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
+                    // Container(
+                    //   width: MediaQuery.of(context).size.width,
+                    //   height: MediaQuery.of(context).size.height / 2.4,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(30),
+                    //     image: DecorationImage(
+                    //       image: widget.gallery != null
+                    //           ? AssetImage(widget.gallery!)
+                    //           : AssetImage('assets/images/default_image.png'),
+                    //       fit: BoxFit.cover,
+                    //     ),
+                    //   ),
+                    //   child: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       GestureDetector(
+                    //         onTap: () {
+                    //           Navigator.pop(context);
+                    //         },
+                    //         child: Container(
+                    //           margin: EdgeInsets.all(15),
+                    //           padding: EdgeInsets.all(10),
+                    //           decoration: BoxDecoration(
+                    //             color: Colors.white,
+                    //             borderRadius: BorderRadius.circular(10),
+                    //             boxShadow: [
+                    //               BoxShadow(
+                    //                 color: Colors.black12,
+                    //                 blurRadius: 2,
+                    //                 spreadRadius: 4,
+                    //               ),
+                    //             ],
+                    //           ),
+                    //           child: Icon(
+                    //             Icons.arrow_back,
+                    //             color: Color(0xFFB8B8B8),
+                    //             size: 20,
+                    //           ),
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height / 2.4,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          image: DecorationImage(
-                            image: AssetImage("assets/images/Coeurdes Alpes.png"),
-                            fit: BoxFit.cover,
-                          )),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              margin: EdgeInsets.all(15),
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 2,
-                                    spreadRadius: 4,
-                                  ),
-                                ],
-                              ),
-                              child: Icon(
-                                Icons.arrow_back,
-                                color: Color(0xFFB8B8B8),
-                                size: 20,
-                              ),
-                            ),
-                          )
-                        ],
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Image.network(
+                          widget.gallery!, // Thêm dấu chấm than (!) để tránh lỗi null
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            // Hiển thị hình ảnh mặc định hoặc thông báo khi không tải được
+                            return Center(child: Text('Failed to load image'));
+                          },
+                        ),
                       ),
                     ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(15),
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 2,
+                                  spreadRadius: 4,
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Color(0xFFB8B8B8),
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
                     Positioned(
                         bottom: -20,
                         right: 20,
@@ -105,17 +175,22 @@ class _PlaceScreenState extends State<PlaceScreen>{
                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Coeurdes Aples",
-                        style: GoogleFonts.getFont(
-                          "Montserrat",
-                          fontWeight: FontWeight.w600,
-                          fontSize: 28,
-                          color: Color(0xFF232323),
+                      Expanded(
+                        child: Text(
+                          widget.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.visible,
+                          style: GoogleFonts.getFont(
+                            "Montserrat",
+                            fontWeight: FontWeight.w600,
+                            fontSize: 28,
+                            color: Color(0xFF232323),
+                          ),
                         ),
                       ),
+                      SizedBox(width: 20), // Increase this value for more space
                       Text(
                         "Show Map",
                         style: GoogleFonts.getFont(
@@ -147,7 +222,7 @@ class _PlaceScreenState extends State<PlaceScreen>{
                 ),
                 SizedBox(height: 15),
                 Text(
-                  "Aspen, in Colorado’s Rocky Mountains, is a ski resort town and year-round destination for outdoor recreation. It's also known for high-end restaurants and boutiques, and landmarks like the Wheeler Opera House, built in 1889 during the area’s silver mining boom. ",
+                  widget.shortDescription,
                   style: GoogleFonts.getFont(
                     "Roboto Condensed",
                     fontWeight: FontWeight.w500,
@@ -206,7 +281,9 @@ class _PlaceScreenState extends State<PlaceScreen>{
                 ),
                 Padding(
                   padding: const EdgeInsets.all(TSizes.defaultSpace),
-                  child: TGallerySlider(banners: [TImages.chicago, TImages.lima, TImages.tokyo],),
+                  child: TGallerySlider(
+                    banners: [TImages.chicago, TImages.lima, TImages.tokyo],
+                  ),
                 ),
                 // SizedBox(height: 25),
 
@@ -223,7 +300,7 @@ class _PlaceScreenState extends State<PlaceScreen>{
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "November to February: This period is generally considered the best time to visit Mount Fuji for clear views.\n April and May: During these months, Mount Fuji becomes adorned with pink moss at its base, making it easier to spot even from a distance.\n June to August: These are the most challenging months to see Mount Fuji due to cloud cover.",
+                  widget.description,
                   style: GoogleFonts.getFont(
                     "Roboto Condensed",
                     fontWeight: FontWeight.w500,
@@ -238,8 +315,12 @@ class _PlaceScreenState extends State<PlaceScreen>{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const TSectionHeading(title: 'Reviews (345)', showActionButton: false),
-                    IconButton(onPressed: () => Get.to(() => const ProductReviewsScreen()), icon: const Icon(Iconsax.arrow_right_3))
+                    const TSectionHeading(
+                        title: 'Reviews (345)', showActionButton: false),
+                    IconButton(
+                        onPressed: () =>
+                            Get.to(() => const ProductReviewsScreen()),
+                        icon: const Icon(Iconsax.arrow_right_3))
                   ],
                 ),
               ],
@@ -270,10 +351,9 @@ class _PlaceScreenState extends State<PlaceScreen>{
                           color: Color(0xFF232323),
                         ),
                       ),
-
                     ),
                     Text(
-                      "\$199",
+                      widget.price,
                       style: GoogleFonts.getFont(
                         "Montserrat",
                         fontWeight: FontWeight.w700,
@@ -351,5 +431,3 @@ class _PlaceScreenState extends State<PlaceScreen>{
     );
   }
 }
-
-
