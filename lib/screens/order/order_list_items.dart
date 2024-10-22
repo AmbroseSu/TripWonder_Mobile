@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tripwonder/navigation_menu.dart';
 import 'package:tripwonder/screens/product_detail/my_trip.dart';
 import 'package:tripwonder/screens/product_detail/place_screen.dart';
 
@@ -47,7 +48,10 @@ class TOrderListItems extends StatelessWidget {
                 ),
                 IconButton(
                   // onPressed: () => Get.to(() => MyTripScreen()), // Truyền packageId tại đây
-                  onPressed: () => Get.to(() => PlaceScreen(title: '', price: '', province: '', startTime: '', endTime: '', shortDescription: '', description: '', gallery: '',)),
+                  onPressed: () => Get.to(() =>
+                      // PlaceScreen(title: '', price: '', province: '', startTime: '', endTime: '', shortDescription: '', description: '', gallery: '',)
+                    NavigationMenu()
+                  ),
                   icon: const Icon(Iconsax.arrow_right_34, size: TSizes.iconSm),
                 ),
               ],

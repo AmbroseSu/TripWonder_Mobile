@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tripwonder/navigation_menu.dart';
+import 'package:tripwonder/screens/order/order.dart';
 
 import '../../styles&text&sizes/sizes.dart';
 import '../../styles&text&sizes/text_strings.dart';

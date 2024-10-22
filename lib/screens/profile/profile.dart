@@ -39,26 +39,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _storageService = _getIt.get<StorageService>();
   }
 
-  // Future<Map<String, dynamic>> fetchUserProfile() async {
-  //   final int? userId = UserManager().id;
-  //
-  //   if (userId == null) {
-  //     throw Exception('User ID is null');
-  //   }
-  //
-  //   final response = await http.get(
-  //     Uri.parse("https://tripwonder.onrender.com/api/v1/user/get-user-by-id?userId=$userId"),
-  //   );
-  //
-  //   if (response.statusCode == 200) {
-  //     final data = json.decode(response.body);
-  //     return data['content'];
-  //   } else if (response.statusCode == 404) {
-  //     throw Exception('User not found: ${response.reasonPhrase}');
-  //   } else {
-  //     throw Exception('Failed to load user profile: ${response.reasonPhrase}');
-  //   }
-  // }
 
   Future<Map<String, dynamic>> fetchUserProfile() async {
     final int? userId = UserManager().id;
