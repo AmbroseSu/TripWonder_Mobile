@@ -5,29 +5,57 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tripwonder/api/response/tour.dart';
 import 'package:tripwonder/screens/cart/cart.dart';
-import 'package:tripwonder/screens/checkout/checkout.dart';
 import 'package:tripwonder/screens/product_detail/product_reviews.dart';
 import 'package:tripwonder/styles&text&sizes/sizes.dart';
 import 'package:tripwonder/widgets/gallery_slider.dart';
 import 'package:tripwonder/widgets/section_heading.dart';
-
+import 'package:http/http.dart' as http;
+import '../../api/global_variables/user_manage.dart';
 import '../../styles&text&sizes/image_strings.dart';
-import '../../widgets/promo_slider.dart';
 
 class PlaceScreen extends StatefulWidget {
   final Tour tour;
 
 
   const PlaceScreen({
-    Key? key, required this.tour,
+    super.key, required this.tour,
 
-  }) : super(key: key);
+  });
 
   @override
   _PlaceScreenState createState() => _PlaceScreenState();
 }
 
 class _PlaceScreenState extends State<PlaceScreen> {
+
+  Future<void> addToCart() async {
+    final userId = UserManager().id; // Lấy userId từ UserManager
+    final tourId = widget.tour.id; // Lấy tourId từ đối tượng tour
+
+    final url = 'https://tripwonder.onrender.com/api/v1/order/add/$userId/$tourId';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+      );
+
+      if (response.statusCode == 200) {
+        // Nếu thành công, chuyển đến CartScreen
+        Get.to(() => const CartScreen());
+      } else {
+        // Xử lý lỗi nếu không thành công
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to add to cart. Please try again.')),
+        );
+      }
+    } catch (error) {
+      // Xử lý lỗi khi gọi API
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred. Please try again.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -74,7 +102,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
+                              boxShadow: const [
                                 BoxShadow(
                                   color: Colors.black12,
                                   blurRadius: 2,
@@ -82,7 +110,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                                 ),
                               ],
                             ),
-                            child: Icon(
+                            child: const Icon(
                               Icons.arrow_back,
                               color: Color(0xFFB8B8B8),
                               size: 20,
@@ -97,7 +125,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                         right: 20,
                         child: Container(
                           padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.white,
                             shape: BoxShape.circle,
                             boxShadow: [
@@ -108,7 +136,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                               ),
                             ],
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.favorite,
                             size: 30,
                             color: Colors.redAccent,
@@ -225,8 +253,8 @@ class _PlaceScreenState extends State<PlaceScreen> {
                     color: Color(0xFF232323),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(TSizes.defaultSpace),
+                const Padding(
+                  padding: EdgeInsets.all(TSizes.defaultSpace),
                   child: TGallerySlider(
                     banners: [TImages.chicago, TImages.lima, TImages.tokyo],
                   ),
@@ -311,7 +339,9 @@ class _PlaceScreenState extends State<PlaceScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () => Get.to(() => const CartScreen()),
+                onTap: () {
+                  addToCart();
+                },
                 child: Container(
                   height: 60,
                   width: MediaQuery.of(context).size.width / 2,
