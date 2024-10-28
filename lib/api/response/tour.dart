@@ -83,7 +83,7 @@ class Tour {
       attendance: map['attendance'] as int,
       province: map['province'] as String,
       ratingReviews: (map['ratingReviews'] as List)
-          .map((e) => e as int)
+          .map((e) => e['rating'] as int)
           .toList(),
       galleries: (map['galleries'] as List)
           .map((e) => e['imageUrl'] as String)

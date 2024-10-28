@@ -47,6 +47,47 @@ class _TCartItemState extends State<TCartItem> {
     }
   }
 
+  Future<void> _removeItem(int index) async {
+    final cartId = items[index].id; // Lấy cartId từ item cần xóa
+    final response = await http.delete(Uri.parse("https://tripwonder.onrender.com/api/v1/order/deleteAll/$cartId"));
+
+    if (response.statusCode == 200) {
+      // Nếu xóa thành công, xóa item khỏi danh sách
+      setState(() {
+        items.removeAt(index);
+      });
+    } else {
+      // Xử lý lỗi nếu xóa không thành công
+      throw Exception('Failed to delete cart item');
+    }
+  }
+
+  Future<void> _updateAttendancepl(int index, int change) async {
+    final int newQuantity = items[index].quantity + change;
+    if (newQuantity < 1) return; // Đảm bảo quantity không dưới 1
+
+    final int? userId = UserManager().id; // Lấy userId
+    final int tourId = items[index].packageTour.id; // Lấy tourId từ packageTour
+
+    // Gọi API để cập nhật số lượng
+    final response = await http.post(
+      Uri.parse("https://tripwonder.onrender.com/api/v1/order/add/$userId/$tourId"),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'quantity': newQuantity}),
+    );
+
+    if (response.statusCode == 200) {
+      // Nếu cập nhật thành công, cập nhật số lượng trong items
+      setState(() {
+        items[index].quantity = newQuantity;
+      });
+    } else {
+      // Xử lý lỗi nếu cập nhật không thành công
+      throw Exception('Failed to update attendance');
+    }
+  }
+
+
 
   double get totalPrice => items.fold<double>(
     0,
@@ -62,11 +103,6 @@ class _TCartItemState extends State<TCartItem> {
     });
   }
 
-  void _removeItem(int index) {
-    setState(() {
-      items.removeAt(index); // Remove item at the given index
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,11 +164,18 @@ class _TCartItemState extends State<TCartItem> {
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
 
+                            // /// Increase Button
+                            // IconButton(
+                            //   icon: Icon(Icons.add),
+                            //   onPressed: () => _updateAttendance(index, 1),
+                            // ),
+
                             /// Increase Button
                             IconButton(
                               icon: Icon(Icons.add),
-                              onPressed: () => _updateAttendance(index, 1),
+                              onPressed: () => _updateAttendancepl(index, 1),
                             ),
+
                           ],
                         ),
                         TProductPriceText(price: item.totalPrice.toStringAsFixed(2)),
@@ -140,11 +183,13 @@ class _TCartItemState extends State<TCartItem> {
                     ),
                   ),
 
+
                   /// Delete Button
                   IconButton(
                     icon: Icon(Icons.delete, color: Color(0xFF55B97D)),
                     onPressed: () => _removeItem(index),
                   ),
+
                 ],
               ),
               const SizedBox(height: 20), // Thay đổi chiều cao tại đây để tăng khoảng cách

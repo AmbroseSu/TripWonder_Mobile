@@ -16,55 +16,6 @@ import 'cart_item.dart';
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   final int? userId = UserManager().id;  // Ensure userId is non-null and convert it to int
-  //
-  //   return Scaffold(
-  //     backgroundColor: Colors.white,
-  //     // appBar: TAppBar(
-  //     //   title:
-  //     //   Text('Order', style: Theme.of(context).textTheme.headlineMedium), showBackArrow: true,
-  //     //   actions: [
-  //     //     TCircularIcon(
-  //     //       icon: Iconsax.add,
-  //     //       onPressed: () => Get.to(const NavigationMenu()),
-  //     //     )
-  //     //   ],
-  //     // ),
-  //     appBar: AppBar(
-  //       backgroundColor: Colors.white,
-  //       title: Text('Order', style: Theme.of(context).textTheme.headlineMedium),
-  //       centerTitle: true,
-  //     ),
-  //     body: Padding(
-  //       padding: const EdgeInsets.all(TSizes.defaultSpace),
-  //       child: TCartItem(), // Pass the user ID here
-  //     ),
-  //
-  //     /// Checkout Button
-  //     bottomNavigationBar: Padding(
-  //       padding: const EdgeInsets.all(TSizes.defaultSpace),
-  //       child: Builder(
-  //         builder: (context) {
-  //           // Mock total price (for testing purposes)
-  //           final double totalPrice = 3500.0; // Set any mock value you want
-  //
-  //           return
-  //             ElevatedButton(
-  //             onPressed: () => Get.to(() => const CheckoutScreen()),
-  //             style: ElevatedButton.styleFrom(
-  //               backgroundColor: Color(0xFF55B97D)
-  //             ),
-  //             child: Text('Checkout \$${totalPrice.toStringAsFixed(2)}', style: TextStyle(color: Colors.white)),
-  //           );
-  //         },
-  //       ),
-  //     ),
-  //
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     final int? userId = UserManager().id;
@@ -92,7 +43,7 @@ class CartScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF55B97D)
               ),
-              child: Text('Checkout \$${totalPrice.toStringAsFixed(2)}', style: TextStyle(color: Colors.white)),
+              child: Text('Checkout', style: TextStyle(color: Colors.white)),
             );
           },
         ),
