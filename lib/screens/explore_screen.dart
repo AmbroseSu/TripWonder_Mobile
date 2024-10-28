@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:tripwonder/screens/product_detail/all_tours.dart';
 import 'package:tripwonder/screens/search/search_result.dart';
+import '../api/response/tour.dart';
 import '../widgets/popular_item.dart';
 import '../widgets/recommend_item.dart';
 import '../widgets/promo_slider.dart';
@@ -36,28 +37,6 @@ class _ExploreScreenState extends State<ExploreScreen>
     fetchCategories();
     fetchRecommendedTours();// Gọi API cho gói tour
   }
-
-  // Future<void> fetchCategories() async {
-  //   try {
-  //     final response = await http.get(
-  //       Uri.parse('https://tripwonder.onrender.com/api/v1/category/get-all?page=1&limit=100'),
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       final data = json.decode(utf8.decode(response.bodyBytes));
-  //       final List categories = data['content'];
-  //
-  //       setState(() {
-  //         _categories = categories.map((category) => category['name'] as String).toList();
-  //         _tabController = TabController(length: _categories.length, vsync: this);
-  //       });
-  //     } else {
-  //       throw Exception('Failed to load categories');
-  //     }
-  //   } catch (e) {
-  //     print("Error fetching categories: $e");
-  //   }
-  // }
 
 
     Future<void> fetchCategories() async {
@@ -90,7 +69,7 @@ class _ExploreScreenState extends State<ExploreScreen>
     }
   }
 
-    Future<void> fetchToursByCategory(String categoryId) async {
+  Future<void> fetchToursByCategory(String categoryId) async {
     try {
       final response = await http.get(
         Uri.parse('https://tripwonder.onrender.com/api/v1/packageOff/get?page=0&size=100&category=$categoryId'),
@@ -98,8 +77,9 @@ class _ExploreScreenState extends State<ExploreScreen>
 
       if (response.statusCode == 200) {
         final data = json.decode(utf8.decode(response.bodyBytes));
+
         setState(() {
-          _categoryTours[categoryId] = data['content']['content']; // Lưu tour theo categoryId
+          _categoryTours['$categoryId'] = data['content']['content']; // Lưu tour theo categoryId
         });
       } else {
         throw Exception('Failed to load tours for category: $categoryId');
@@ -113,17 +93,37 @@ class _ExploreScreenState extends State<ExploreScreen>
   // Thêm phương thức để gọi API lấy tour
   Future<void> fetchRecommendedTours() async {
     try {
+      // final response = await http.get(
+      //   Uri.parse('https://tripwonder.onrender.com/api/v1/packageOff/get?page=0&size=100'),
+      // );
+      //
+      // if (response.statusCode == 200) {
+      //   final data = json.decode(utf8.decode(response.bodyBytes));
+      //   final List<dynamic> tourJsonList = json.decode(data)['content']['content'];
+      //
+      //
+      //   setState(() {
+      //     // _recommendedTours = data['content']['content'];
+      //
+      //     _recommendedTours = tourJsonList.map((json) => Tour.fromJson(json)).toList();
+      //
+      //   });
+      // } else {
+      //   throw Exception('Failed to load recommended tours');
+      // }
       final response = await http.get(
         Uri.parse('https://tripwonder.onrender.com/api/v1/packageOff/get?page=0&size=100'),
       );
 
       if (response.statusCode == 200) {
-        final data = json.decode(utf8.decode(response.bodyBytes));
+        final jsonString = utf8.decode(response.bodyBytes);
+        final List<dynamic> tourJsonList = json.decode(jsonString)['content']['content'];
+
         setState(() {
-          _recommendedTours = data['content']['content'];
-        });
+          // Chuyển đổi từng phần tử trong danh sách JSON thành đối tượng Tour
+          _recommendedTours = tourJsonList.map((json) => Tour.fromJson(json)).toList();        });
       } else {
-        throw Exception('Failed to load recommended tours');
+        print('Failed to load tours');
       }
     } catch (e) {
       print("Error fetching recommended tours: $e");
@@ -202,7 +202,7 @@ class _ExploreScreenState extends State<ExploreScreen>
           borderRadius: BorderRadius.circular(24),
         ),
         child: TextField(
-          decoration: InputDecoration(
+          decoration: InputDecoration (
             hintText: "Find places to visit",
             border: InputBorder.none,
             prefixIcon: Icon(Icons.search),
@@ -344,6 +344,12 @@ class _ExploreScreenState extends State<ExploreScreen>
             title: tour['name'].toString(),
             rating: "4.0", // Điều chỉnh nếu có rating thực
             image: imageUrl ?? "đường_dẫn_ảnh_mặc định",
+            onTap: ()
+            {Tour tourObj = Tour.fromMap(tour);
+                Get.to(() =>
+                PlaceScreen(tour: tourObj,// Cũng cung cấp giá trị mặc định ở đây nếu cần
+                )
+            );}
           );
         }).toList(),
       ),
@@ -364,26 +370,23 @@ class _ExploreScreenState extends State<ExploreScreen>
           child: Row(
             children: displayedTours.map((tour) {
               // Lấy hình ảnh từ danh sách galleries
-              String? imageUrl;
-              if (tour['galleries'] != null && tour['galleries'].isNotEmpty) {
-                imageUrl = tour['galleries'][0]['imageUrl'] as String; // Chuyển đổi về kiểu String
-              }
+              String? imageUrl = tour.getFirstImageUrl();
+              // if (tour['galleries'] != null && tour['galleries'].isNotEmpty) {
+              //   // imageUrl = tour['galleries'][0]['imageUrl'] as String; // Chuyển đổi về kiểu String
+              // }
+
+              //imageUrl = tour.g; // Chuyển đổi về kiểu String
+
 
               return RecommendCard(
-                title: tour['name'].toString(),
+                title: tour.name,
                 duration: "4N/5D", // Điều chỉnh nếu có thời gian thực trong API
                 deal: "Hot Deal", // Có thể thay bằng dữ liệu thật từ API
                 image: imageUrl ?? "đường_dẫn_ảnh_mặc định", // Sử dụng toán tử ?? để cung cấp giá trị mặc định
-                onTap: () => Get.to(() => PlaceScreen(
-                  title: tour['name'],
-                  price: tour['price'].toString(),
-                  province: tour['province'],
-                  startTime: tour['startTime'],
-                  endTime: tour['endTime'],
-                  shortDescription: tour['shortDescription'],
-                  description: tour['description'],
-                  gallery: imageUrl ?? "đường_dẫn_ảnh_mặc định", // Cũng cung cấp giá trị mặc định ở đây nếu cần
-                )),
+                onTap: () => Get.to(() =>
+                    PlaceScreen(tour: tour,
+                )
+                ),
               );
             }).toList(),
           ),

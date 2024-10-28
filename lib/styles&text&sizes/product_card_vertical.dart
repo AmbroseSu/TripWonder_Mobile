@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
+import 'package:tripwonder/api/response/tour.dart';
 import 'package:tripwonder/screens/product_detail/place_screen.dart';
 import 'package:tripwonder/styles&text&sizes/shadows.dart';
 import 'package:tripwonder/styles&text&sizes/sizes.dart';
@@ -15,25 +17,10 @@ import '../widgets/t_rounded_image.dart';
 import 'colors.dart';
 
 class TProductCardVertical extends StatelessWidget {
-  final String title;
-  final String price;
-  final String startTime;
-  final String endTime;
-  final String gallery;
-  final String province;
-  final String shortDescription;
-  final String description;
+  final Tour tour;
 
   const TProductCardVertical({
-    super.key,
-    required this.title,
-    required this.price,
-    required this.startTime,
-    required this.province,
-    required this.endTime,
-    required this.gallery,
-    required this.shortDescription,
-    required this.description,
+    super.key, required this.tour,
   });
 
   @override
@@ -46,14 +33,7 @@ class TProductCardVertical extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => PlaceScreen(
-              title: title,
-              price: price,
-              province: province,
-              gallery: gallery,
-              startTime: startTime,
-              endTime: endTime,
-              shortDescription: shortDescription,
-              description: description,
+              tour: tour,
             ),
           ),
         );
@@ -76,7 +56,7 @@ class TProductCardVertical extends StatelessWidget {
                   AspectRatio(
                     aspectRatio: 4 / 3.1,
                     child: TRoundedImage(
-                      imageUrl: gallery,
+                      imageUrl: tour.getFirstImageUrl()!,
                       applyImageRadius: true,
                       fit: BoxFit.cover,
                       isNetworkImage: true, // Flag để sử dụng `Image.network`
@@ -92,16 +72,18 @@ class TProductCardVertical extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Title
-                  TProductTitleText(title: title, smallSize: true),
+                  TProductTitleText(title: tour.name, smallSize: true),
                   const SizedBox(height: TSizes.spaceBtwItems / 2),
-                  // Start time and end time
-                  Text('$startTime - $endTime',
-                      style: Theme.of(context).textTheme.labelSmall),
+
+                  Text(
+                    '${DateFormat('dd/MM/yyyy').format(tour.startTime)} - ${DateFormat('dd/MM/yyyy').format(tour.endTime)}',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
                   const SizedBox(height: TSizes.spaceBtwItems / 2),
 
                   Row(
                     children: [
-                      Text(province,
+                      Text('${tour.province}',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: Theme.of(context).textTheme.labelMedium),
@@ -130,7 +112,7 @@ class TProductCardVertical extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: TSizes.sm),
-                  child: TProductPriceText(price: price),
+                  child: TProductPriceText(price: '${tour.price}'),
                 ),
                 Container(
                   decoration: const BoxDecoration(

@@ -26,7 +26,7 @@ import '../signup/signup.dart';class PaymentSuccess extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         actions: [
-          IconButton(onPressed: () => Get.offAll(() => const LoginScreen()), icon: const Icon(CupertinoIcons.clear))
+          IconButton(onPressed: () => Get.offAll(() => const NavigationMenu()), icon: const Icon(CupertinoIcons.clear))
         ],
       ),
       body: SingleChildScrollView(

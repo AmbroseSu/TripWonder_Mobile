@@ -7,34 +7,37 @@ class PopularItem extends StatelessWidget {
   final String title;
   final String rating;
   final String image;
+  final VoidCallback? onTap;
+
 
   const PopularItem({
     super.key,
     required this.title,
     required this.rating,
-    required this.image,
+    required this.image, this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PlaceScreen(
-              title: title, // Truyền title vào PlaceScreen
-              price: '', // Cần điền thông tin giá nếu có
-              province: '', // Cần điền thông tin tỉnh nếu có
-              startTime: '', // Cần điền thông tin thời gian bắt đầu nếu có
-              endTime: '', // Cần điền thông tin thời gian kết thúc nếu có
-              shortDescription: '', // Cần điền mô tả ngắn nếu có
-              description: '', // Cần điền mô tả nếu có
-              gallery: '', // Cần điền thông tin gallery nếu có
-            ),
-          ),
-        );
-      },
+      // onTap: () {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => PlaceScreen(
+      //         title: title, // Truyền title vào PlaceScreen
+      //         price: '', // Cần điền thông tin giá nếu có
+      //         province: '', // Cần điền thông tin tỉnh nếu có
+      //         startTime: '', // Cần điền thông tin thời gian bắt đầu nếu có
+      //         endTime: '', // Cần điền thông tin thời gian kết thúc nếu có
+      //         shortDescription: '', // Cần điền mô tả ngắn nếu có
+      //         description: '', // Cần điền mô tả nếu có
+      //         gallery: '', // Cần điền thông tin gallery nếu có
+      //       ),
+      //     ),
+      //   );
+      // },
+      onTap: onTap,
       child: Container(
         width: 250,
         height: 290,

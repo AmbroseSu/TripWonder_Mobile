@@ -17,6 +17,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../../api/global_variables/user_manage.dart';
+import '../../api/response/tour.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -37,8 +38,11 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     if (response.statusCode == 200) {
       // Sử dụng utf8.decode để giải mã dữ liệu trả về
       final data = json.decode(utf8.decode(response.bodyBytes));
+      final List<dynamic> tourJsonList = data['content'];
+
       setState(() {
-        favoriteTours = data['content'];
+        // favoriteTours = data['content'];
+        favoriteTours = tourJsonList.map((json) => Tour.fromJson(json)).toList();
       });
     } else {
       throw Exception('Failed to load favorite tours');
@@ -72,20 +76,15 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 itemCount: favoriteTours.length,
                 itemBuilder: (_, index) {
                   final tour = favoriteTours[index];
-                  final startTime = DateTime.parse(tour['startTime']);
-                  final endTime = DateTime.parse(tour['endTime']);
-                  final formattedStartTime = '${startTime.day}/${startTime.month}/${startTime.year}';
-                  final formattedEndTime = '${endTime.day}/${endTime.month}/${endTime.year}';
-                  final imageUrl = tour['galleries'].isNotEmpty
-                      ? tour['galleries'][0]['imageUrl']
-                      : TImages.tokyo;
+                  // final startTime = DateTime.parse(tour['startTime']);
+                  // final endTime = DateTime.parse(tour['endTime']);
+                  // final formattedStartTime = '${startTime.day}/${startTime.month}/${startTime.year}';
+                  // final formattedEndTime = '${endTime.day}/${endTime.month}/${endTime.year}';
+                  // final imageUrl = tour['galleries'].isNotEmpty
+                  //     ? tour['galleries'][0]['imageUrl']
+                  //     : TImages.tokyo;
 
-                  return TProductCardVerticalFav(
-                    title: tour['name'],
-                    price: tour['price'].toString(),
-                    startTime: formattedStartTime,
-                    endTime: formattedEndTime,
-                    imageUrl: imageUrl,
+                  return TProductCardVerticalFav(tour: tour,
                   );
                 },
               ),

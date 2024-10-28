@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tripwonder/api/response/tour.dart';
 import 'package:tripwonder/screens/cart/cart.dart';
 import 'package:tripwonder/screens/checkout/checkout.dart';
 import 'package:tripwonder/screens/product_detail/product_reviews.dart';
@@ -14,25 +15,12 @@ import '../../styles&text&sizes/image_strings.dart';
 import '../../widgets/promo_slider.dart';
 
 class PlaceScreen extends StatefulWidget {
-  final String title;
-  final String price;
-  final String province;
-  final String? gallery;
-  final String startTime;
-  final String endTime;
-  final String shortDescription;
-  final String description;
+  final Tour tour;
+
 
   const PlaceScreen({
-    Key? key,
-    required this.title,
-    required this.price,
-    required this.province,
-    this.gallery,
-    required this.startTime,
-    required this.endTime,
-    required this.shortDescription,
-    required this.description,
+    Key? key, required this.tour,
+
   }) : super(key: key);
 
   @override
@@ -55,49 +43,6 @@ class _PlaceScreenState extends State<PlaceScreen> {
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    // Container(
-                    //   width: MediaQuery.of(context).size.width,
-                    //   height: MediaQuery.of(context).size.height / 2.4,
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(30),
-                    //     image: DecorationImage(
-                    //       image: widget.gallery != null
-                    //           ? AssetImage(widget.gallery!)
-                    //           : AssetImage('assets/images/default_image.png'),
-                    //       fit: BoxFit.cover,
-                    //     ),
-                    //   ),
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       GestureDetector(
-                    //         onTap: () {
-                    //           Navigator.pop(context);
-                    //         },
-                    //         child: Container(
-                    //           margin: EdgeInsets.all(15),
-                    //           padding: EdgeInsets.all(10),
-                    //           decoration: BoxDecoration(
-                    //             color: Colors.white,
-                    //             borderRadius: BorderRadius.circular(10),
-                    //             boxShadow: [
-                    //               BoxShadow(
-                    //                 color: Colors.black12,
-                    //                 blurRadius: 2,
-                    //                 spreadRadius: 4,
-                    //               ),
-                    //             ],
-                    //           ),
-                    //           child: Icon(
-                    //             Icons.arrow_back,
-                    //             color: Color(0xFFB8B8B8),
-                    //             size: 20,
-                    //           ),
-                    //         ),
-                    //       )
-                    //     ],
-                    //   ),
-                    // ),
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height / 2.4,
@@ -107,7 +52,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
                         child: Image.network(
-                          widget.gallery!, // Thêm dấu chấm than (!) để tránh lỗi null
+                          widget.tour.getFirstImageUrl()!, // Thêm dấu chấm than (!) để tránh lỗi null
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             // Hiển thị hình ảnh mặc định hoặc thông báo khi không tải được
@@ -180,7 +125,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                     children: [
                       Expanded(
                         child: Text(
-                          widget.title,
+                          widget.tour.name,
                           maxLines: 2,
                           overflow: TextOverflow.visible,
                           style: GoogleFonts.getFont(
@@ -223,7 +168,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                 ),
                 SizedBox(height: 15),
                 Text(
-                  widget.shortDescription,
+                  widget.tour.shortDescription,
                   style: GoogleFonts.getFont(
                     "Roboto Condensed",
                     fontWeight: FontWeight.w500,
@@ -301,7 +246,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  widget.description,
+                  widget.tour.description,
                   style: GoogleFonts.getFont(
                     "Roboto Condensed",
                     fontWeight: FontWeight.w500,
@@ -354,7 +299,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                       ),
                     ),
                     Text(
-                      widget.price,
+                      widget.tour.price.toString(),
                       style: GoogleFonts.getFont(
                         "Montserrat",
                         fontWeight: FontWeight.w700,

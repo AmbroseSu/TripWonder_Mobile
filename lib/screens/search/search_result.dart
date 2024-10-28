@@ -92,15 +92,7 @@ class _SearchResultState extends State<SearchResult> {
                     imageUrl = tour['galleries'][0]['imageUrl'];
                   }
 
-                  return TProductCardVertical(
-                    title: tour['name'].toString(),
-                    price: tour['price'].toString(),
-                    province: tour['province'].toString(),
-                    gallery: imageUrl.toString(),
-                    startTime: tour['startTime'] != null ? formatDate(tour['startTime']) : 'N/A',
-                    endTime: tour['endTime'] != null ? formatDate(tour['endTime']) : 'N/A',
-                    shortDescription : tour['shortDescription'].toString(),
-                    description : tour['description'].toString(),
+                  return TProductCardVertical(tour: tour,
                   );
                 },
               ),

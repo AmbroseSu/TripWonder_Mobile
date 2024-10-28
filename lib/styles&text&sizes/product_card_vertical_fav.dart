@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:tripwonder/screens/product_detail/place_screen.dart';
 import 'package:tripwonder/styles&text&sizes/shadows.dart';
 import 'package:tripwonder/styles&text&sizes/sizes.dart';
 
+import '../api/response/tour.dart';
 import '../widgets/helper_functions.dart';
 import '../widgets/product_price_text.dart';
 import '../widgets/product_title_text.dart';
@@ -15,19 +17,11 @@ import 'colors.dart';
 import 'image_strings.dart';
 
 class TProductCardVerticalFav extends StatelessWidget {
-  final String title;
-  final String price;
-  final String startTime;
-  final String endTime;
-  final String imageUrl;
+  final Tour tour;
 
   const TProductCardVerticalFav({
-    super.key,
-    required this.title,
-    required this.price,
-    required this.startTime,
-    required this.endTime,
-    required this.imageUrl,
+    super.key, required this.tour,
+
   });
 
   @override
@@ -35,7 +29,9 @@ class TProductCardVerticalFav extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     return GestureDetector(
-      onTap: () => Get.to(() => const PlaceScreen(title: '', price: '', province: '', startTime: '', endTime: '', shortDescription: '', description: '', gallery: '',)),
+      onTap: () => Get.to(() =>
+          PlaceScreen(tour: tour,)
+      ),
       child: Container(
         width: 180,
         padding: const EdgeInsets.all(1),
@@ -54,7 +50,7 @@ class TProductCardVerticalFav extends StatelessWidget {
                   AspectRatio(
                     aspectRatio: 4 / 3.1,
                     child: TRoundedImage(
-                      imageUrl: imageUrl,
+                      imageUrl: tour.getFirstImageUrl()!,
                       applyImageRadius: true,
                       fit: BoxFit.cover,
                       isNetworkImage: true, // Flag để sử dụng `Image.network`
@@ -75,11 +71,13 @@ class TProductCardVerticalFav extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Title
-                  TProductTitleText(title: title, smallSize: true),
+                  TProductTitleText(title: tour.name, smallSize: true),
                   const SizedBox(height: TSizes.spaceBtwItems / 2),
                   // Start time and end time
-                  Text('$startTime - $endTime',
-                      style: Theme.of(context).textTheme.labelSmall),
+                  Text(
+                    '${DateFormat('dd/MM/yyyy').format(tour.startTime)} - ${DateFormat('dd/MM/yyyy').format(tour.endTime)}',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
               const SizedBox(height: TSizes.spaceBtwItems / 2),
 
               Row(
@@ -102,7 +100,7 @@ class TProductCardVerticalFav extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: TSizes.sm),
-                  child: TProductPriceText(price: price),
+                  child: TProductPriceText(price: '${tour.price}'),
                 ),
                 Container(
                   decoration: const BoxDecoration(
