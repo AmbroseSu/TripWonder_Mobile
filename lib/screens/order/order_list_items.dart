@@ -47,11 +47,11 @@ class TOrderListItems extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  // onPressed: () => Get.to(() => MyTripScreen()), // Truyền packageId tại đây
-                  onPressed: () => Get.to(() =>
-                      // PlaceScreen(title: '', price: '', province: '', startTime: '', endTime: '', shortDescription: '', description: '', gallery: '',)
-                    NavigationMenu()
-                  ),
+                  onPressed: () => Get.to(() => MyTripScreen()), // Truyền packageId tại đây
+                  // onPressed: () => Get.to(() =>
+                  //     // PlaceScreen(title: '', price: '', province: '', startTime: '', endTime: '', shortDescription: '', description: '', gallery: '',)
+                  //   NavigationMenu()
+                  // ),
                   icon: const Icon(Iconsax.arrow_right_34, size: TSizes.iconSm),
                 ),
               ],
@@ -69,7 +69,7 @@ class TOrderListItems extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Order', style: Theme.of(context).textTheme.labelMedium),
+                            Text('Order', style: Theme.of(context).textTheme.labelLarge),
                             Text('[#256f2]', style: Theme.of(context).textTheme.titleMedium),
                           ],
                         ),
@@ -87,8 +87,9 @@ class TOrderListItems extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Private Trip', style: Theme.of(context).textTheme.labelMedium),
+                            Text('Private Trip', style: Theme.of(context).textTheme.labelLarge),
                             Text('25 Nov, 2024', style: Theme.of(context).textTheme.titleMedium),
+                            Text('27 Nov, 2024', style: Theme.of(context).textTheme.titleMedium),
                           ],
                         ),
                       ),

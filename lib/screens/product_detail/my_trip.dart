@@ -5,7 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:tripwonder/screens/profile/profile.dart';
 import 'package:tripwonder/styles&text&sizes/image_strings.dart';
 import 'package:tripwonder/widgets/appbar.dart';
-import 'package:tripwonder/widgets/my_trip_card.dart';
+import 'package:tripwonder/styles&text&sizes/my_trip_card.dart';
 import '../../widgets/t_circular_icon.dart';
 
 class MyTripScreen extends StatefulWidget {

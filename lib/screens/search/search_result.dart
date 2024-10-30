@@ -7,6 +7,8 @@ import 'package:tripwonder/styles&text&sizes/product_card_vertical.dart';
 import 'package:tripwonder/styles&text&sizes/sizes.dart';
 import 'package:tripwonder/widgets/grid_layout.dart';
 
+import '../../api/response/tour.dart';
+
 class SearchResult extends StatefulWidget {
   final String query; // Query tìm kiếm
 
@@ -19,7 +21,7 @@ class SearchResult extends StatefulWidget {
 class _SearchResultState extends State<SearchResult> {
   List<dynamic> tours = []; // Danh sách các tour tìm thấy
 
-  // Hàm gọi API để lấy dữ liệu các tour
+
   Future<void> fetchTours() async {
     try {
       final response = await http.get(
@@ -33,7 +35,9 @@ class _SearchResultState extends State<SearchResult> {
         // Kiểm tra và lấy dữ liệu
         if (jsonResponse['body'] != null && jsonResponse['body']['content'] != null && jsonResponse['body']['content']['content'] != null) {
           setState(() {
-            tours = jsonResponse['body']['content']['content'];
+            tours = (jsonResponse['body']['content']['content'] as List)
+                .map((item) => Tour.fromJson(item))
+                .toList();
           });
         } else {
           setState(() {
@@ -48,6 +52,7 @@ class _SearchResultState extends State<SearchResult> {
       print("Error fetching tours: $e");
     }
   }
+
 
   @override
   void initState() {
@@ -85,15 +90,9 @@ class _SearchResultState extends State<SearchResult> {
               TGridLayout(
                 itemCount: tours.length,
                 itemBuilder: (_, index) {
-                  final tour = tours[index];
+                  final tour = tours[index] as Tour; // tour giờ là đối tượng Tour
 
-                  String? imageUrl;
-                  if (tour['galleries'] != null && tour['galleries'].isNotEmpty) {
-                    imageUrl = tour['galleries'][0]['imageUrl'];
-                  }
-
-                  return TProductCardVertical(tour: tour,
-                  );
+                  return TProductCardVertical(tour: tour);
                 },
               ),
             ],
