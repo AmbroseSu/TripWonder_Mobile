@@ -78,7 +78,7 @@ class _SearchResultState extends State<SearchResult> {
       body: tours.isEmpty
           ? Center(
         child: Text(
-          'Tour này không tồn tại',
+          'Vui lòng đợi trong giây lát',
           style: TextStyle(fontSize: 18, color: Colors.grey),
         ),
       )
