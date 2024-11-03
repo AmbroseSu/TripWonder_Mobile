@@ -1,95 +1,75 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:tripwonder/api/response/order_code.dart';
 import 'package:tripwonder/navigation_menu.dart';
 import 'package:tripwonder/screens/success_screen/payment_success.dart';
 import 'package:tripwonder/styles&text&sizes/image_strings.dart';
-
+import '../../api/global_variables/user_manage.dart';
+import '../../api/response/payment_info.dart';
 import '../../styles&text&sizes/colors.dart';
 import '../../styles&text&sizes/sizes.dart';
-import '../../widgets/appbar.dart';
 import '../../widgets/billing_address_section.dart';
 import '../../widgets/billing_payment_section.dart';
 import '../../widgets/helper_functions.dart';
 import '../../widgets/rounded_container.dart';
-import '../../widgets/t_circular_icon.dart';
 import '../cart/cart_item.dart';
-import '../explore_screen.dart';
-import '../success_screen/success_screen.dart';
-//
-// class CheckoutScreen extends StatelessWidget {
-//   const CheckoutScreen({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final userId = UserManager().id.toString();
-//     final dark = THelperFunctions.isDarkMode(context);
-//     return Scaffold(
-//       appBar: TAppBar(
-//           showBackArrow: true,
-//           title: Text('Order Review',
-//               style: Theme.of(context).textTheme.headlineSmall)),
-//       body: SingleChildScrollView(
-//         child: Padding(
-//           padding: const EdgeInsets.all(TSizes.defaultSpace),
-//           child: Column(
-//             children: [
-//               /// -- Items in Cart
-//               TCartItem(),
-//               SizedBox(height: TSizes.spaceBtwSections),
-//
-//               // /// -- Coupon TextField
-//               // TCouponCode(),
-//               // const SizedBox(height: TSizes.spaceBtwSections),
-//
-//               /// -- Billing Section
-//               TRoundedContainer(
-//                 showBorder: true,
-//                 padding: const EdgeInsets.all(TSizes.sm),
-//                 backgroundColor: dark ? TColors.black : TColors.white,
-//                 child: const Column(
-//                   children: [
-//                     // /// Pricing
-//                     // TBillingAmountSection(),
-//                     // SizedBox(height: TSizes.spaceBtwItems),
-//                     //
-//                     // /// Divider
-//                     // Divider(),
-//                     // SizedBox(height: TSizes.spaceBtwItems),
-//
-//                     /// Payment Methods
-//                     TBillingPaymentSection(),
-//                     SizedBox(height: TSizes.spaceBtwItems),
-//
-//                     /// Address
-//                     TBillingAddressSection(),
-//                   ],
-//                 ),
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//
-//       /// Checkout Button
-//       bottomNavigationBar: Padding(
-//         padding: const EdgeInsets.all(TSizes.defaultSpace),
-//         child: ElevatedButton(
-//             onPressed: () => Get.to(() => SuccessScreen(
-//               image: TImages.paymentSuccess,
-//               title: 'Payment Success!',
-//               subTitle: 'Your package is ready!',
-//               onPressed: () => Get.offAll(() => const NavigationMenu()),
-//             ),
-//             ),
-//             child: Text('Checkout')),
-//       ),
-//     );
-//   }
-// }
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 
 class CheckoutScreen extends StatelessWidget {
   const CheckoutScreen({super.key});
+
+  Future<void> _checkOrderStatus(BuildContext context, int orderCode) async {
+    final String apiUrl = 'https://tripwonder.onrender.com/api/v1/order/checkStatus?orderCode=$orderCode';
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        // Kiểm tra trạng thái thanh toán
+        if (responseData['content'] == 'PAID') {
+          OrderCode().orderCode = null;
+          // Nếu đã thanh toán, chuyển đến trang PaymentSuccess
+          Get.to(() => PaymentSuccess(
+            image: TImages.paymentSuccess,
+            title: 'Payment Success!',
+            subTitle: 'Your package is ready!',
+            onPressed: () => Get.to(() => const NavigationMenu()),
+          ));
+        } else {
+          // Nếu không, hiển thị thông báo thanh toán không thành công
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Payment Fail')),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to check order status. Status code: ${response.statusCode}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+  }
+
+  Future<void> _launchCheckout(BuildContext context) async {
+    // final paymentInfo = await _fetchPaymentInfo(context);
+    OrderCode orderCode = OrderCode();
+    if (orderCode.orderCode != null) {
+      // Lấy orderCode từ paymentInfo và chuyển đổi sang String
+      //String orderCode = paymentInformation.orderCode;
+      print(orderCode.orderCode);// Sửa dòng này
+      // Gọi kiểm tra trạng thái đơn hàng
+      await _checkOrderStatus(context, orderCode.orderCode!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,37 +77,26 @@ class CheckoutScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: TAppBar(
-        title:
-        Text('Order Review', style: Theme.of(context).textTheme.headlineMedium), showBackArrow: true,
-        actions: [
-          TCircularIcon(
-            icon: Iconsax.add,
-            onPressed: () => Get.to(const ExploreScreen()),
-          )
-        ],
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text('Order', style: Theme.of(context).textTheme.headlineMedium),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
-              /// -- Items in Cart (Mocked Cart Data for UI testing)
-              const TCartItem(), // You can keep this as mock data already exists.
+              const TCartItem(),
               const SizedBox(height: TSizes.spaceBtwSections),
-
-              /// -- Billing Section (No API calls here)
               TRoundedContainer(
                 showBorder: true,
                 padding: const EdgeInsets.all(TSizes.sm),
                 backgroundColor: dark ? TColors.black : TColors.white,
                 child: const Column(
                   children: [
-                    /// Payment Methods
                     TBillingPaymentSection(),
                     SizedBox(height: TSizes.spaceBtwItems),
-
-                    /// Address
                     TBillingAddressSection(),
                   ],
                 ),
@@ -136,21 +105,14 @@ class CheckoutScreen extends StatelessWidget {
           ),
         ),
       ),
-
-      /// Checkout Button (Navigates to SuccessScreen without API)
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: ElevatedButton(
-          onPressed: () => Get.to(() => PaymentSuccess(
-            image: TImages.paymentSuccess,
-            title: 'Payment Success!',
-            subTitle: 'Your package is ready!',
-            onPressed: () => Get.to(() => const NavigationMenu()),
-          )),
+          onPressed: () => _launchCheckout(context), // Gọi phương thức launchCheckout
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFF55B97D)
+            backgroundColor: Color(0xFF55B97D),
           ),
-          child: const Text('Checkout', style: TextStyle(color: Colors.white),),
+          child: const Text('Checkout', style: TextStyle(color: Colors.white)),
         ),
       ),
     );

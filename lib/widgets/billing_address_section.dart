@@ -12,23 +12,7 @@ class TBillingAddressSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TSectionHeading(title: 'Customer Information', buttonTitle: 'See All', onPressed: () => Get.to(() => ProfileScreen())),
-        Text('Trip Wonder', style: Theme.of(context).textTheme.bodyLarge),
-
-        // Row(
-        //   children: [
-        //     const Icon(Icons.phone, color: Colors.grey, size: 16),
-        //     const SizedBox(width: TSizes.spaceBtwItems),
-        //     Text('+84 234 567 890', style: Theme.of(context).textTheme.bodyMedium),
-        //   ],
-        // ),
-        // const SizedBox(height: TSizes.spaceBtwItems/2),
-        // Row(
-        //   children: [
-        //     const Icon(Icons.location_history, color: Colors.grey, size: 16),
-        //     const SizedBox(width: TSizes.spaceBtwItems),
-        //     Expanded(child: Text('192 Manhattan, New York, USA', style: Theme.of(context).textTheme.bodyMedium, softWrap: true)),
-        //   ],
-        // ),
+        Text('TripWonder', style: Theme.of(context).textTheme.bodyLarge),
       ],
     );
   }

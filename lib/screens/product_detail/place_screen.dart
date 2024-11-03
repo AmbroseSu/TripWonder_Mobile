@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:tripwonder/api/response/tour.dart';
 import 'package:tripwonder/screens/cart/cart.dart';
 import 'package:tripwonder/screens/product_detail/product_reviews.dart';
@@ -56,6 +57,15 @@ class _PlaceScreenState extends State<PlaceScreen> {
     }
   }
 
+  String formatPrice(double price) {
+    final formatter = NumberFormat.currency(
+      locale: 'vi', // Định dạng kiểu Việt Nam
+      symbol: '', // Bỏ ký hiệu tiền tệ nếu không cần
+      decimalDigits: 0, // Không hiển thị số thập phân
+    );
+    return formatter.format(price).trim(); // Trim để xóa khoảng trắng nếu có
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -77,17 +87,32 @@ class _PlaceScreenState extends State<PlaceScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: ClipRRect(
+                      child:
+                      // ClipRRect(
+                      //   borderRadius: BorderRadius.circular(30),
+                      //   child: Image.network(
+                      //     widget.tour.getFirstImageUrl()!, // Thêm dấu chấm than (!) để tránh lỗi null
+                      //     fit: BoxFit.cover,
+                      //     errorBuilder: (context, error, stackTrace) {
+                      //       // Hiển thị hình ảnh mặc định hoặc thông báo khi không tải được
+                      //       return Center(child: Text('Failed to load image'));
+                      //     },
+                      //   ),
+                      // ),
+                      ClipRRect(
                         borderRadius: BorderRadius.circular(30),
-                        child: Image.network(
-                          widget.tour.getFirstImageUrl()!, // Thêm dấu chấm than (!) để tránh lỗi null
+                        child: widget.tour.getFirstImageUrl() != null
+                            ? Image.network(
+                          widget.tour.getFirstImageUrl()!,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                            // Hiển thị hình ảnh mặc định hoặc thông báo khi không tải được
+                            // Show a default message or image if the image fails to load
                             return Center(child: Text('Failed to load image'));
                           },
-                        ),
+                        )
+                            : Center(child: Text('No image available')), // Placeholder when image URL is null
                       ),
+
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,7 +352,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                       ),
                     ),
                     Text(
-                      widget.tour.price.toString(),
+                        formatPrice(widget.tour.price),
                       style: GoogleFonts.getFont(
                         "Montserrat",
                         fontWeight: FontWeight.w700,

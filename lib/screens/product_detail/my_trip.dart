@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tripwonder/screens/map/google_map_polyline.dart';
 import 'package:tripwonder/screens/profile/profile.dart';
 import 'package:tripwonder/styles&text&sizes/image_strings.dart';
 import 'package:tripwonder/widgets/appbar.dart';
@@ -113,18 +114,15 @@ class _MyTripScreenState extends State<MyTripScreen> {
                   children: [
                     _buildActionButton(
                       context,
-                      icon: Iconsax.edit,
-                      label: 'Edit Address',
-                      onPressed: () => Get.to(() => const ProfileScreen()),
+                      icon: Iconsax.map,
+                      label: 'All Locations',
+                      onPressed: () => Get.to(() => const GoogleMapPolyline()),
                     ),
-                    const SizedBox(width: 16),
                     _buildActionButton(
                       context,
-                      icon: Iconsax.note_text,
-                      label: 'Add Note',
-                      onPressed: () {
-                        // Add your logic for Add Note here
-                      },
+                      icon: Iconsax.edit,
+                      label: 'My Profile',
+                      onPressed: () => Get.to(() => const ProfileScreen()),
                     ),
                   ],
                 ),

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:tripwonder/screens/cart/cart.dart';
+import 'package:tripwonder/screens/map/google_map_polygon.dart';
+import 'package:tripwonder/screens/map/google_map_polyline.dart';
+import 'package:tripwonder/screens/map/map_page.dart';
+import 'package:tripwonder/screens/order/order.dart';
 
 class MyTripCard extends StatelessWidget {
   final String cafeName;
@@ -95,18 +100,25 @@ class MyTripCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: const [
-                Icon(Iconsax.discount_circle, color: Color(0xFF55B97D)),
-                SizedBox(width: 8.0),
-                Text(
-                  '1 Discount is applied',
-                  style: TextStyle(
-                      fontSize: 16, color: Color(0xFF55B97D), fontWeight: FontWeight.w500),
-                ),
-              ],
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => GoogleMapPolyline()));
+              },
+              child: const Row(
+                children: [
+                  Icon(Iconsax.discount_circle, color: Color(0xFF55B97D)),
+                  SizedBox(width: 8.0),
+                  Text(
+                    '1 Discount is applied',
+                    style: TextStyle(
+                        fontSize: 16, color: Color(0xFF55B97D), fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 18, color: Color(0xFF55B97D)),
+            Icon(Icons.arrow_forward_ios, size: 18, color: Color(0xFF55B97D)),
           ],
         ),
       )],

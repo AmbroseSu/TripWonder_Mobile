@@ -43,8 +43,29 @@ class TRoundedImage extends StatelessWidget {
             color: backgroundColor,
             borderRadius: BorderRadius.circular(borderRadius)
         ),
-        child: ClipRRect(borderRadius: applyImageRadius ? BorderRadius.circular(borderRadius) : BorderRadius.zero,
-            child: Image(fit: fit, image: isNetworkImage ? NetworkImage(imageUrl) : AssetImage(imageUrl) as ImageProvider)),
+        // child: ClipRRect(borderRadius: applyImageRadius ? BorderRadius.circular(borderRadius) : BorderRadius.zero,
+
+          child: ClipRRect(
+            borderRadius: applyImageRadius ? BorderRadius.circular(borderRadius) : BorderRadius.zero,
+            child: isNetworkImage
+                ? Image.network(
+              imageUrl,
+              fit: fit,
+              errorBuilder: (context, error, stackTrace) {
+                // Trả về một widget thay thế nếu có lỗi
+                return Container(
+                  color: Colors.grey, // Màu nền khi có lỗi
+                  child: Icon(Icons.error, color: Colors.red), // Hình ảnh lỗi
+                );
+              },
+            )
+                : Image.asset(
+              imageUrl,
+              fit: fit,
+            ),
+          ),
+
+          // child: Image(fit: fit, image: isNetworkImage ? NetworkImage(imageUrl) : AssetImage(imageUrl) as ImageProvider)),
       ),
     );
   }
