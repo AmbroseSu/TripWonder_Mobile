@@ -125,9 +125,12 @@
 // }
 
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:tripwonder/api/firebase_api.dart';
+import 'package:tripwonder/firebase_options.dart';
 import 'package:tripwonder/screens/splash_screen.dart';
 import 'package:tripwonder/utils.dart';
 
@@ -141,6 +144,8 @@ void main() async{
 
 Future<void> setup() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseApi().initNotification();
   await setupFirebase();
   await registerServices();
 }

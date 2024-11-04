@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:tripwonder/screens/chat/allchats_screen.dart';
+import 'package:tripwonder/screens/chat/chat_screen.dart';
 import 'package:tripwonder/screens/product_detail/all_tours.dart';
 import 'package:tripwonder/screens/search/search_result.dart';
 import '../api/response/tour.dart';
@@ -141,13 +144,38 @@ class _ExploreScreenState extends State<ExploreScreen>
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Column(
+        body: Stack(
           children: [
-            SizedBox(height: 10),
-            _buildHeader(),
-            _buildSearchBar(),
-            _buildTabBar(),
-            _buildTabBarView(),
+            Column(
+              children: [
+                SizedBox(height: 10),
+                _buildHeader(),
+                _buildSearchBar(),
+                _buildTabBar(),
+                _buildTabBarView(),
+              ],
+            ),
+            // Positioned(
+            //   bottom: 16,
+            //   right: 16,
+            //   child: FloatingActionButton(
+            //     onPressed: () {
+            //       // Define the action for the Help button here
+            //       Get.to(() => const AllChatsScreen());
+            //       Get.snackbar(
+            //         "Help",
+            //         "Need assistance? Contact our support team.",
+            //         snackPosition: SnackPosition.BOTTOM,
+            //         duration: Duration(seconds: 3),
+            //       );
+            //     },
+            //     backgroundColor: Color(0xFF55B97D),
+            //     child: Icon(
+            //       CupertinoIcons.question_circle,
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -182,7 +210,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               ),
               SizedBox(width: 6),
               Text(
-                "District 9, \nHo Chi Minh",
+                "Dĩ An, \nBình Dương",
                 style: GoogleFonts.montserrat(fontWeight: FontWeight.w500, fontSize: 16, color: Color(0xFF606060)),
               ),
             ],
