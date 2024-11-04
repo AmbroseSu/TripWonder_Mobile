@@ -94,7 +94,9 @@ class _TOrderListItemsState extends State<TOrderListItems> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () => Get.to(() => MyTripScreen()), // Chuyển đến MyTripScreen với packageId
+                    onPressed: () => Get.to(() => MyTripScreen(
+                      tourId: order.id,
+                    )), // Chuyển đến MyTripScreen với packageId
                     icon: const Icon(Iconsax.arrow_right_34, size: TSizes.iconSm),
                   ),
                 ],
