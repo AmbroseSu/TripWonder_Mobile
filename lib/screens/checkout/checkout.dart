@@ -6,8 +6,6 @@ import 'package:tripwonder/api/response/order_code.dart';
 import 'package:tripwonder/navigation_menu.dart';
 import 'package:tripwonder/screens/success_screen/payment_success.dart';
 import 'package:tripwonder/styles&text&sizes/image_strings.dart';
-import '../../api/global_variables/user_manage.dart';
-import '../../api/response/payment_info.dart';
 import '../../styles&text&sizes/colors.dart';
 import '../../styles&text&sizes/sizes.dart';
 import '../../widgets/billing_address_section.dart';
