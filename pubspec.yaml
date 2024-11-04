@@ -52,6 +52,13 @@ dependencies:
   flutter_local_notifications: ^17.2.4
   googleapis: ^13.2.0
   googleapis_auth: ^1.6.0
+  cloud_firestore: ^4.17.5
+  file_picker: ^8.0.7
+  dash_chat_2: ^0.0.20
+  delightful_toast: ^1.1.0
+  path: ^1.9.0
+  fluttertoast: ^8.2.8
+  intl_utils: ^2.8.7
 
 
 dev_dependencies:

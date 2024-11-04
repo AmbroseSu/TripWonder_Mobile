@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:tripwonder/api/global_variables/fcm_token_manage.dart';
 import 'package:tripwonder/api/global_variables/user_manage.dart';
+import 'package:tripwonder/api/push_notification_service.dart';
 import 'package:tripwonder/consts.dart';
 import 'package:tripwonder/screens/login/login.dart';
 import 'package:tripwonder/service/media_service.dart';
@@ -106,7 +107,7 @@ class _SignupScreenState extends State<SignupScreen> {
       'password': password,
       'address': address,
       'gender': gender.toUpperCase(),
-      'FCMToken': fcmtoken,
+      'fcmtoken': fcmtoken,
       'image': pfpURL,
     };
 
@@ -134,12 +135,12 @@ class _SignupScreenState extends State<SignupScreen> {
       if (response.statusCode == 201) {
         String body = "Save information successfully. Please login !!";
         String title = "Create Successfully.";
-        // await PushNotificationService.sendNotificationToSelectedDrived(
-        //     fcmToken,
-        //     context,
-        //     title,
-        //     body
-        // );
+        await PushNotificationService.sendNotificationToSelectedDrived(
+            fcmToken,
+            context,
+            title,
+            body
+        );
         Get.to(() => const LoginScreen());
       } else {
         // Xử lý khi API thất bại

@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tripwonder/api/global_variables/fcm_token_manage.dart';
+import 'package:tripwonder/api/push_notification_service.dart';
 import 'package:tripwonder/api/response/order_code.dart';
 import 'package:tripwonder/navigation_menu.dart';
 import 'package:tripwonder/screens/success_screen/payment_success.dart';
@@ -34,7 +36,19 @@ class CheckoutScreen extends StatelessWidget {
         // Kiểm tra trạng thái thanh toán
         if (responseData['content'] == 'PAID') {
           OrderCode().orderCode = null;
+          TokenManager tokenManager = TokenManager();
+          String? fcmToken = tokenManager.fcmToken;
           // Nếu đã thanh toán, chuyển đến trang PaymentSuccess
+          print("1010101010101010101919118181918171819197111");
+          print(fcmToken);
+          String body = "Your package is ready!";
+          String title = "Payment Success!";
+          await PushNotificationService.sendNotificationToSelectedDrived(
+              fcmToken,
+              context,
+              title,
+              body
+          );
           Get.to(() => PaymentSuccess(
             image: TImages.paymentSuccess,
             title: 'Payment Success!',
