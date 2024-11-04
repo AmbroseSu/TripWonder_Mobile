@@ -334,7 +334,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         Text.rich(
                           TextSpan(children: [
                             TextSpan(
-                                text: 'By using TripWonder, you agree to ',
+                                text: 'By using TripWonder, \nyou agree to ',
                                 style: Theme.of(context).textTheme.bodySmall),
                             TextSpan(
                                 text: 'Terms ',

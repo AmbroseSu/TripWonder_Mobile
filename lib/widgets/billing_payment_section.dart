@@ -235,7 +235,7 @@ class TBillingPaymentSection extends StatelessWidget {
       children: [
         TSectionHeading(
           title: 'Payment Method',
-          buttonTitle: 'Payment Information',
+          buttonTitle: 'Pay trip',
           onPressed: () => _launchPaymentLink(context),
         ),
         SizedBox(height: TSizes.spaceBtwItems / 2),

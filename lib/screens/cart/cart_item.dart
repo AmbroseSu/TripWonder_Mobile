@@ -195,32 +195,32 @@ class _TCartItemState extends State<TCartItem> {
                                 item.quantity.toString(),
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
-                              const SizedBox(width: 50),
-      
+                              const SizedBox(width: 25),
+
                               /// Decrease Button
                               IconButton(
                                 icon: Icon(Icons.remove),
                                 onPressed: () => _updateAttendancerm(index, -1),
                               ),
-      
+
                               /// Attendance Number
                               Text(
                                 item.quantity.toString(),
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
-      
+
                               // /// Increase Button
                               // IconButton(
                               //   icon: Icon(Icons.add),
                               //   onPressed: () => _updateAttendance(index, 1),
                               // ),
-      
+
                               /// Increase Button
                               IconButton(
                                 icon: Icon(Icons.add),
                                 onPressed: () => _updateAttendancepl(index, 1),
                               ),
-      
+
                             ],
                           ),
                           TProductPriceText(price: formatPrice(item.totalPrice)),

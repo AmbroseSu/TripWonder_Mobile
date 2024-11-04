@@ -98,34 +98,6 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
         body: Stack(
           children: [
             _buildUI(),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    //Get.to(() => AllTicketSellerScreen());
-                    // Xử lý sự kiện khi nhấn nút View Request
-                    // Ví dụ: Điều hướng đến màn hình yêu cầu
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Màu nền của nút
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 9), // Kích thước nút nằm ngang
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20), // Đặt border radius cho nút bo tròn
-                    ),
-                  ),
-                  child: const Text(
-                    "View Request",
-                    style: TextStyle(
-                      color: Colors.white, // Màu chữ trắng
-                      fontWeight: FontWeight.bold, // In đậm chữ
-                      fontSize: 17, // Kích thước chữ lớn hơn nếu cần
-                    ),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -146,7 +118,7 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
 
   Widget _chatsList() {
     return StreamBuilder(
-      stream: _databaseService.getUserProfiles(userManager.email!), // Lấy danh sách người dùng
+      stream: _databaseService.getUserProfiles("locnht.it@gmail.com"), // Lấy danh sách người dùng
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Center(
