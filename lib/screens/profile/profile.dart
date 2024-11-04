@@ -10,11 +10,8 @@ import 'package:tripwonder/styles&text&sizes/colors.dart';
 import '../../api/global_variables/user_manage.dart';
 import '../../styles&text&sizes/image_strings.dart';
 import '../../styles&text&sizes/sizes.dart';
-import '../../widgets/appbar.dart';
 import '../../widgets/profile_menu.dart';
 import '../../widgets/section_heading.dart';
-import '../../widgets/t_circular_icon.dart';
-import '../../widgets/t_circular_image.dart';
 import '../settings/settings.dart';
 import 'package:http/http.dart' as http;
 
