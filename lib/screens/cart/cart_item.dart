@@ -123,7 +123,7 @@ class _TCartItemState extends State<TCartItem> {
 
   double get totalPrice => items.fold<double>(
     0,
-        (sum, item) => sum + (item.totalPrice * item.quantity),
+        (sum, item) => sum + (item.packageTour.price * item.quantity),
   );
 
   void _updateAttendance(int index, int change) {
@@ -223,7 +223,7 @@ class _TCartItemState extends State<TCartItem> {
       
                             ],
                           ),
-                          TProductPriceText(price: formatPrice(item.totalPrice)),
+                          TProductPriceText(price: item.packageTour.price.toString()),
                         ],
                       ),
                     ),
